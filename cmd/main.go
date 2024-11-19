@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/mhs294/mulhall/db"
@@ -16,6 +17,7 @@ var teamRepo *db.TeamRepository
 func init() {
 	log.Println("init started")
 
+	mongoDBConnStr = os.Getenv("MULHALL_DB_CONN_STR")
 	var err error
 	teamRepo, err = db.NewTeamRepository(mongoDBConnStr)
 	if err != nil {
