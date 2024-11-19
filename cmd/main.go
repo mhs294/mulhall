@@ -2,11 +2,28 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/mhs294/mulhall/db"
+	"github.com/mhs294/mulhall/types"
 )
+
+var mongoDBConnStr string
+var teamRepo *db.TeamRepository
+
+func init() {
+	log.Println("init started")
+
+	var err error
+	teamRepo, err = db.NewTeamRepository(mongoDBConnStr)
+	if err != nil {
+		panic(err)
+	}
+
+	log.Println("init complete")
+}
 
 func main() {
 	router := gin.Default()
@@ -33,45 +50,18 @@ func main() {
 	router.Run("0.0.0.0:8080") // Port must match EXPOSE command in Dockerfile
 }
 
-type Team struct {
-	ID        int    `json:"id"`
-	Shorthand string `json:"shorthand"`
-	Location  string `json:"location"`
-	Name      string `json:"name"`
-}
-
-// TODO - host in database
-var teams = map[int]Team{
-	1: {
-		ID:        1,
-		Shorthand: "ARI",
-		Location:  "Arizona",
-		Name:      "Cardinals",
-	},
-	2: {
-		ID:        2,
-		Shorthand: "GB",
-		Location:  "Green Bay",
-		Name:      "Packers",
-	},
-}
-
 func getTeams(ctx *gin.Context) {
-	t := make([]Team, len(teams))
-	for i := 1; i <= len(teams); i++ {
-		t = append(t, teams[i])
-	}
-	ctx.JSON(http.StatusOK, t)
+	teams := teamRepo.GetAllTeams()
+	ctx.JSON(http.StatusOK, teams)
 }
 
 func chooseTeam(ctx *gin.Context) {
 	id := ctx.Param("id")
-	teamID, err := strconv.ParseInt(id, 10, 32)
-	if err != nil {
-		ctx.String(http.StatusBadRequest, "need an int value for team ID")
+	team := teamRepo.GetTeam(id)
+	if team == (types.Team{}) {
+		ctx.AbortWithStatus(http.StatusNotFound)
 		return
 	}
 
-	team := teams[int(teamID)]
 	ctx.String(http.StatusOK, fmt.Sprintf("You chose the %s %s!", team.Location, team.Name))
 }

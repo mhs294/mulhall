@@ -1,0 +1,45 @@
+.logo-button {
+    padding-left: 15%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 15px;
+    justify-content: center;
+    align-items: center;
+    display: flex !important;
+    font-weight: bold;
+    font-size: 48px;
+    border: solid;
+    border-radius: 10px;
+    width: 100%;
+}
+.logo-button-image {
+    width: 64px;
+    height: 64px;
+    margin-right: 5%;
+    margin-left: -15%;
+    position: relative;
+  }
+
+/* Arizona Cardinals */
+.ari {
+    border-color: #ffffff;
+    background-color: #98233f;
+    color: #ffffff;
+}
+.ari:hover {
+    border-color: #98233f;
+    background-color: #ffffff;
+    color: #98233f;
+}
+
+/* Green Bay Packers */
+.gb {
+    border-color: #ffb111;
+    background-color: #203732;
+    color: #ffb111;
+}
+.gb:hover {
+    border-color: #203732;
+    background-color: #ffb111;
+    color: #203732;
+}
