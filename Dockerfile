@@ -13,6 +13,12 @@ RUN go mod download
 # Copy the source code into the container
 COPY . .
 
+# Install templ binary executables
+RUN go install github.com/a-h/templ/cmd/templ@latest
+
+# Generate the .go files from .templ files
+RUN templ generate
+
 # Build the Go app
 RUN go build -o mulhall cmd/main.go
 

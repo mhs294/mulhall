@@ -1,0 +1,405 @@
+.logo-button {
+    padding-left: 15%;
+    padding-top: 5px;
+    padding-bottom: 5px;
+    padding-right: 15px;
+    justify-content: center;
+    align-items: center;
+    display: flex !important;
+    font-weight: bold;
+    border: solid;
+    border-width: 5px;
+    border-radius: 10px;
+    width: 100%;
+}
+.logo-button-img {
+    width: 64px;
+    height: 64px;
+    margin-right: 5%;
+    margin-left: -15%;
+    position: relative;
+}
+
+/* Arizona Cardinals */
+.ari {
+    border-color: #a5acaf;
+    background-color: #97233f;
+    color: #ffffff;
+}
+.ari:hover {
+    border-color: #97233f;
+    background-color: #ffffff;
+    color: #97233f;
+}
+
+/* Atlanta Falcons */
+.atl {
+    border-color: #a71930;
+    background-color: #000000;
+    color: #ffffff;
+}
+.atl:hover {
+    border-color: #000000;
+    background-color: #a71930;
+    color: #000000;
+}
+
+/* Baltimore Ravens */
+.bal {
+    border-color: #9a7611;
+    background-color: #24135f;
+    color: #ffffff;
+}
+.bal:hover {
+    border-color: #24135f;
+    background-color: #9a7611;
+    color: #24135f;
+}
+
+/* Buffalo Bills */
+.buf {
+    border-color: #c60c30;
+    background-color: #00338d;
+    color: #ffffff;
+}
+.buf:hover {
+    border-color: #00338d;
+    background-color: #c60c30;
+    color: #00338d;
+}
+
+/* Carolina Panthers */
+.car {
+    border-color: #000000;
+    background-color: #0085ca;
+    color: #ffffff;
+}
+.car:hover {
+    border-color: #0085ca;
+    background-color: #bfc0bf;
+    color: #000000;
+}
+
+/* Chiacgo Bears */
+.chi {
+    border-color: #e64100;
+    background-color: #0b162a;
+    color: #ffffff;
+}
+.chi:hover {
+    border-color: #0b162a;
+    background-color: #e64100;
+    color: #0b162a;
+}
+
+/* Cincinnati Bengals */
+.cin {
+    border-color: #fb4f14;
+    background-color: #000000;
+    color: #ffffff;
+}
+.cin:hover {
+    border-color: #000000;
+    background-color: #fb4f14;
+    color: #000000;
+}
+
+/* Cleveland Browns */
+.cle {
+    border-color: #ff3c00;
+    background-color: #311d00;
+    color: #ffffff;
+}
+.cle:hover {
+    border-color: #311d00;
+    background-color: #ff3c00;
+    color: #311d00;
+}
+
+/* Dallas Cowboys */
+.dal {
+    border-color: #b0b7bc;
+    background-color: #002244;
+    color: #ffffff;
+}
+.dal:hover {
+    border-color: #002244;
+    background-color: #b0b7bc;
+    color: #002244;
+}
+
+/* Denver Broncos */
+.den {
+    border-color: #fc4c02;
+    background-color: #0a2343;
+    color: #ffffff;
+}
+.den:hover {
+    border-color: #0a2343;
+    background-color: #fc4c02;
+    color: #0a2343;
+}
+
+/* Detroit Lions */
+.det {
+    border-color: #b0b7bc;
+    background-color: #0076b6;
+    color: #ffffff;
+}
+.det:hover {
+    border-color: #0076b6;
+    background-color: #b0b7bc;
+    color: #0076b6;
+}
+
+/* Green Bay Packers */
+.gb {
+    border-color: #ffb612;
+    background-color: #203731;
+    color: #ffffff;
+}
+.gb:hover {
+    border-color: #203731;
+    background-color: #ffb612;
+    color: #203731;
+}
+
+/* Houston Texans */
+.hou {
+    border-color: #eb0028;
+    background-color: #021018;
+    color: #ffffff;
+}
+.hou:hover {
+    border-color: #021018;
+    background-color: #eb0028;
+    color: #021018;
+}
+
+/* Indianapolis Colts */
+.ind {
+    border-color: #a5acaf;
+    background-color: #013369;
+    color: #ffffff;
+}
+.ind:hover {
+    border-color: #013369;
+    background-color: #ffffff;
+    color: #013369;
+}
+
+/* Jacksonville Jaguars */
+.jax {
+    border-color: #006778;
+    background-color: #000000;
+    color: #ffffff;
+}
+.jax:hover {
+    border-color: #d7a22a;
+    background-color: #006778;
+    color: #d7a22a;
+}
+
+/* Kansas City Chiefs */
+.kc {
+    border-color: #ffb612;
+    background-color: #e31837;
+    color: #ffffff;
+}
+.kc:hover {
+    border-color: #e31837;
+    background-color: #ffb612;
+    color: #e31837;
+}
+
+/* Los Angeles Chargers */
+.lac {
+    border-color: #ffc20e;
+    background-color: #0080c6;
+    color: #ffffff;
+}
+.lac:hover {
+    border-color: #0080c6;
+    background-color: #ffc20e;
+    color: #0080c6;
+}
+
+/* Los Angeles Rams */
+.lar {
+    border-color: #ffd100;
+    background-color: #003594;
+    color: #ffffff;
+}
+.lar:hover {
+    border-color: #003594;
+    background-color: #ffd100;
+    color: #003594;
+}
+
+/* Las Vegas Raiders */
+.lv {
+    border-color: #a5acaf;
+    background-color: #000000;
+    color: #ffffff;
+}
+.lv:hover {
+    border-color: #000000;
+    background-color: #a5acaf;
+    color: #000000;
+}
+
+/* Miami Dolphins */
+.mia {
+    border-color: #fc4c02;
+    background-color: #008e97;
+    color: #ffffff;
+}
+.mia:hover {
+    border-color: #008e97;
+    background-color: #fc4c02;
+    color: #008e97;
+}
+
+/* Minnesota Vikings */
+.min {
+    border-color: #ffc62f;
+    background-color: #4f2683;
+    color: #ffffff;
+}
+.min:hover {
+    border-color: #4f2683;
+    background-color: #ffc62f;
+    color: #4f2683;
+}
+
+/* New England Patriots */
+.ne {
+    border-color: #c60c30;
+    background-color: #002244;
+    color: #ffffff;
+}
+.ne:hover {
+    border-color: #002244;
+    background-color: #b0b7bc;
+    color: #002244;
+}
+
+/* New Orleans Saints */
+.no {
+    border-color: #d3bc8d;
+    background-color: #000000;
+    color: #ffffff;
+}
+.no:hover {
+    border-color: #000000;
+    background-color: #d3bc8d;
+    color: #000000;
+}
+
+/* New York Giants */
+.nyg {
+    border-color: #a71930;
+    background-color: #0b2265;
+    color: #ffffff;
+}
+.nyg:hover {
+    border-color: #0b2265;
+    background-color: #a71930;
+    color: #0b2265;
+}
+
+/* New York Jets */
+.nyj {
+    border-color: #000000;
+    background-color: #115740;
+    color: #ffffff;
+}
+.nyj:hover {
+    border-color: #115740;
+    background-color: #000000;
+    color: #115740;
+}
+
+/* Philadelphia Eagles */
+.phi {
+    border-color: #a2aaad;
+    background-color: #004851;
+    color: #ffffff;
+}
+.phi:hover {
+    border-color: #004851;
+    background-color: #a2aaad;
+    color: #004851;
+}
+
+/* Pittsburgh Steelers */
+.pit {
+    border-color: #ffb612;
+    background-color: #000000;
+    color: #ffffff;
+}
+.pit:hover {
+    border-color: #000000;
+    background-color: #ffb612;
+    color: #000000;
+}
+
+/* Seattle Seahawks */
+.sea {
+    border-color: #69be28;
+    background-color: #002244;
+    color: #ffffff;
+}
+.sea:hover {
+    border-color: #002244;
+    background-color: #69be28;
+    color: #002244;
+}
+
+/* San Francisco 49ers */
+.sf {
+    border-color: #b3995d;
+    background-color: #aa0000;
+    color: #ffffff;
+}
+.sf:hover {
+    border-color: #aa0000;
+    background-color: #b3995d;
+    color: #aa0000;
+}
+
+/* Tampa Bay Buccaneers */
+.tb {
+    border-color: #a71930;
+    background-color: #322f2b;
+    color: #ffffff;
+}
+.tb:hover {
+    border-color: #322f2b;
+    background-color: #a71930;
+    color: #322f2b;
+}
+
+/* Tennessee Titans */
+.ten {
+    border-color: #4b92db;
+    background-color: #002244;
+    color: #ffffff;
+}
+.ten:hover {
+    border-color: #322f2b;
+    background-color: #4b92db;
+    color: #322f2b;
+}
+
+/* Washington Commanders */
+.was {
+    border-color: #ffb612;
+    background-color: #5a1414;
+    color: #ffffff;
+}
+.was:hover {
+    border-color: #5a1414;
+    background-color: #ffb612;
+    color: #5a1414;
+}

@@ -1,14 +1,18 @@
 package main
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
 	"os"
+	"time"
 
+	"github.com/a-h/templ"
 	"github.com/gin-gonic/gin"
 	"github.com/mhs294/mulhall/db"
 	"github.com/mhs294/mulhall/types"
+	"github.com/mhs294/mulhall/views"
 )
 
 var mongoDBConnStr string
@@ -31,25 +35,43 @@ func main() {
 	router := gin.Default()
 	router.SetTrustedProxies(nil)
 
-	// CORS Middleware
-	router.Use(func(c *gin.Context) {
-		c.Header("Access-Control-Allow-Origin", "*")
-		c.Header("Access-Control-Allow-Credentials", "true")
-		c.Header("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
-		c.Header("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT")
+	// Static content (CSS/JS)
+	router.Static("/static", "./static")
 
-		if c.Request.Method == http.MethodOptions {
-			c.AbortWithStatus(http.StatusNoContent)
-			return
-		}
+	// Middleware
+	router.Use(corsMiddleware)
 
-		c.Next()
-	})
-
+	router.GET("/", indexPage)
 	router.GET("/teams", getTeams)
 	router.POST("/teams/:id", chooseTeam)
 
 	router.Run("0.0.0.0:8080") // Port must match EXPOSE command in Dockerfile
+}
+
+func corsMiddleware(ctx *gin.Context) {
+	ctx.Header("Access-Control-Allow-Origin", "*")
+	ctx.Header("Access-Control-Allow-Credentials", "true")
+	ctx.Header("Access-Control-Allow-Headers", "Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization, accept, origin, Cache-Control, X-Requested-With")
+	ctx.Header("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT")
+
+	if ctx.Request.Method == http.MethodOptions {
+		ctx.AbortWithStatus(http.StatusNoContent)
+		return
+	}
+
+	ctx.Next()
+}
+func render(ctx *gin.Context, status int, template templ.Component) error {
+	ctx.Status(status)
+	return template.Render(ctx.Request.Context(), ctx.Writer)
+}
+
+func indexPage(ctx *gin.Context) {
+	_, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	defer cancel()
+
+	teams := teamRepo.GetAllTeams()
+	render(ctx, http.StatusOK, views.Index(teams))
 }
 
 func getTeams(ctx *gin.Context) {

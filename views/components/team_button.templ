@@ -1,0 +1,18 @@
+package components
+
+import (
+    "fmt"
+    "github.com/mhs294/mulhall/types"
+    "strings"
+)
+
+templ TeamButton(team types.Team) {
+    <button
+        hx-post={ fmt.Sprintf("/teams/%s", team.ID) }
+        hx-target={ fmt.Sprintf("#%s", team.ID) }
+        class={ fmt.Sprintf("flex items-center logo-button %s", strings.ToLower(team.Shorthand)) }
+    >
+        <img class="logo-button-img" src={ fmt.Sprintf("/static/img/%s.webp", strings.ToLower(team.Shorthand)) } />
+        <p class="text-3xl">{ fmt.Sprintf("%s", strings.ToUpper(team.Name)) }</p>
+    </button>
+}
