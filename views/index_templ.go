@@ -10,7 +10,7 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import (
 	"fmt"
-	"github.com/mhs294/mulhall/types"
+	"github.com/mhs294/mulhall/internals/types"
 	"github.com/mhs294/mulhall/views/components"
 )
 

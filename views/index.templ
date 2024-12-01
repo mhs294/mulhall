@@ -2,14 +2,13 @@ package views
 
 import (
     "fmt"
-    "github.com/mhs294/mulhall/types"
+    "github.com/mhs294/mulhall/internals/types"
     "github.com/mhs294/mulhall/views/components"
 )
 
 templ Index(teams []types.Team) {
     <!DOCTYPE html>
     <html lang="en">
-
         @components.Header()
         <body>
             <main class="min-h-screen w-full">

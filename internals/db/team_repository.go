@@ -6,7 +6,7 @@ import (
 	"sort"
 	"time"
 
-	"github.com/mhs294/mulhall/types"
+	"github.com/mhs294/mulhall/internals/types"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
@@ -16,8 +16,8 @@ const db = "mulhall"
 const teamsColl = "teams"
 
 // TeamRepository is a mechanism for loading Team information.
-// Since NFL teams rarely change, the Teams are lazy-loaded and
-// then cached for the lifetime of the application.
+// Since NFL teams rarely change, the Teams are loaded on initialization
+// and then cached for the lifetime of the application.
 type TeamRepository struct {
 	teams map[string]types.Team
 }
