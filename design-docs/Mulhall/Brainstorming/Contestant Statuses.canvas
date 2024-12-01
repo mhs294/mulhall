@@ -1,0 +1,12 @@
+{
+	"nodes":[
+		{"id":"5ede60c0b7cde8a9","type":"text","text":"# Eliminated\n\nContestants with this role are no longer eligible to win the Pool, but are eligible to be reinstated to Active.","x":0,"y":-360,"width":250,"height":220,"color":"2"},
+		{"id":"6fedd05c22b7ab8b","type":"text","text":"# Disqualified\n\nContestants with this role no longer eligible to win the Pool and is not eligible to be reinstated to **Active**. This Status can only be applied by a Pool **Administrator**.","x":500,"y":-345,"width":360,"height":190,"color":"1"},
+		{"id":"7dc9c61c990c76cf","type":"text","text":"# Active\n\n(Default)\n\nContestants with this status are eligible to win the Pool and can continue to submit Picks.","x":-520,"y":-370,"width":250,"height":240,"color":"4"}
+	],
+	"edges":[
+		{"id":"389878416e388730","fromNode":"7dc9c61c990c76cf","fromSide":"right","toNode":"5ede60c0b7cde8a9","toSide":"left","label":"Elimination"},
+		{"id":"0428d77bf30dfd49","fromNode":"5ede60c0b7cde8a9","fromSide":"right","toNode":"6fedd05c22b7ab8b","toSide":"left","label":"Disqualification"},
+		{"id":"1b81394b35fe7217","fromNode":"5ede60c0b7cde8a9","fromSide":"bottom","toNode":"7dc9c61c990c76cf","toSide":"bottom","label":"Reinstatement"}
+	]
+}

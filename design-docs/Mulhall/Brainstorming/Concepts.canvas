@@ -1,0 +1,18 @@
+{
+	"nodes":[
+		{"id":"e4a7579129c9f8b0","type":"text","text":"# Contestant\n\nA Contestant represents a single entry within the pool.\n\nContestants can be managed by a single User or multiple Users.\n\nAt least one User associated with a Contestant must have the **Owner** Role, as it is a requirement to *Select a Pick* (see [[Roles + Functions.canvas|Roles + Functions]])","x":-1184,"y":-1108,"width":425,"height":300,"color":"6"},
+		{"id":"0ecff2677f72d765","type":"text","text":"# Role\n\nA Role defines the various set of permissions available to a given User within the application.","x":-579,"y":-763,"width":250,"height":195},
+		{"id":"8002bfb694476771","type":"text","text":"# Status\n\nA Status defines a Contestant's eligibility within their Pool.","x":-1096,"y":-728,"width":250,"height":160},
+		{"id":"8e6bc8e7c0b02481","type":"text","text":"# User\n\nA User is an individual account tied to a single person.\n\nUsers are identified by an email address, which they use to authenticate to the application.","x":-624,"y":-1072,"width":340,"height":228,"color":"4"},
+		{"id":"d245def8f9a0469c","type":"text","text":"# Pick\n\nA Pick is a selection of a single available team for a given week within a Schedule.\n\nPicks are either Correct or Incorrect depending on the conditions set in the Rules of the Pool.","x":-40,"y":-888,"width":392,"height":320},
+		{"id":"26eb4b61578d34d0","type":"text","text":"# Pool\n\nA Pool is a group of Contestants competing for survival by making correct Picks, which are determined by the Rules of the Pool.\n\nPools have required Conditions that must be defined for each of the following:\n\n- Pick Correctness\n- Pool Winner(s)\n- Pool Reset (Optional)","x":-1780,"y":-1131,"width":408,"height":346,"color":"2"},
+		{"id":"1fcb9c0ffb9e2202","type":"text","text":"# Condition\n\nA Condition defines one or more criteria that must be satisfied.\n\nWhen a Condition's criteria are satisfied, a corresponding Event is triggered.\n\nIn the event that a Condition's criteria are unsatisfied, a subsequent Condition can be checked instead, or a default Event can be triggered.\n\n","x":-1780,"y":-665,"width":408,"height":325}
+	],
+	"edges":[
+		{"id":"8687eaef169ad158","fromNode":"8e6bc8e7c0b02481","fromSide":"bottom","toNode":"0ecff2677f72d765","toSide":"top","label":"1:1"},
+		{"id":"9f3d15c67048b929","fromNode":"e4a7579129c9f8b0","fromSide":"right","toNode":"8e6bc8e7c0b02481","toSide":"left","label":"M:M"},
+		{"id":"d07c864ef10c0a0d","fromNode":"26eb4b61578d34d0","fromSide":"right","toNode":"e4a7579129c9f8b0","toSide":"left","label":"M:M"},
+		{"id":"64fecb217d980942","fromNode":"e4a7579129c9f8b0","fromSide":"bottom","toNode":"8002bfb694476771","toSide":"top","label":"1:1"},
+		{"id":"340de36a5ef5f34b","fromNode":"26eb4b61578d34d0","fromSide":"bottom","toNode":"1fcb9c0ffb9e2202","toSide":"top"}
+	]
+}

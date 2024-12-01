@@ -1,0 +1,29 @@
+{
+	"nodes":[
+		{"id":"b335370c202ce45f","type":"text","text":"#### Are all Contestants Eliminated?","x":-540,"y":-361,"width":290,"height":81},
+		{"id":"5f98acc6c63064e7","type":"text","text":"#### Has the Super Bowl completed?","x":-525,"y":-200,"width":260,"height":80},
+		{"id":"ec787ff3d207367a","type":"text","text":"#### Are there 4 or fewer Active Contestants?","x":-381,"y":-30,"width":262,"height":81},
+		{"id":"d4febd4311baf4d6","type":"text","text":"#### Have at least 15 Regular Season Weeks been completed?","x":-145,"y":-375,"width":299,"height":111},
+		{"id":"540d92d6b1aeccc1","type":"text","text":"Pool resets at the start of the next Regular Season","x":260,"y":-354,"width":250,"height":70,"color":"2"},
+		{"id":"33d18cc787a19fe4","type":"text","text":"Pool resets immediately","x":-120,"y":-190,"width":250,"height":60,"color":"2"},
+		{"id":"d6f269bd33b4c1ed","type":"text","text":"#### Is there only 1 Active Contestant?","x":-545,"y":-528,"width":300,"height":92},
+		{"id":"19a2fe7aed523c1f","type":"text","text":"Remaining Active Contestant is the Winner","x":-145,"y":-522,"width":250,"height":80,"color":"4"},
+		{"id":"b3172b7abdeed437","type":"text","text":"Remaining Active Contestants are the Winners","x":-215,"y":160,"width":220,"height":101,"color":"4"},
+		{"id":"bc38f04d122d4b17","type":"text","text":"Pool continues at the start of the next Regular Season","x":-540,"y":160,"width":265,"height":76,"color":"3"},
+		{"id":"d9a019f4490b97cb","type":"text","text":"Pool continues as normal","x":-670,"y":-30,"width":250,"height":60,"color":"3"},
+		{"id":"13debdec61fc5165","type":"text","text":"### Week Completed","x":-520,"y":-640,"width":250,"height":60,"color":"5"}
+	],
+	"edges":[
+		{"id":"b31d62ce9dae8a12","fromNode":"d6f269bd33b4c1ed","fromSide":"right","toNode":"19a2fe7aed523c1f","toSide":"left","label":"Yes"},
+		{"id":"02a2afdc4b454369","fromNode":"d6f269bd33b4c1ed","fromSide":"bottom","toNode":"b335370c202ce45f","toSide":"top","label":"No"},
+		{"id":"b639dcfd9645411b","fromNode":"b335370c202ce45f","fromSide":"right","toNode":"d4febd4311baf4d6","toSide":"left","label":"Yes"},
+		{"id":"9f84c16cbc8ab954","fromNode":"b335370c202ce45f","fromSide":"bottom","toNode":"5f98acc6c63064e7","toSide":"top","label":"No"},
+		{"id":"f39c10ba8930492d","fromNode":"5f98acc6c63064e7","fromSide":"bottom","toNode":"d9a019f4490b97cb","toSide":"top","label":"No"},
+		{"id":"1ba3932ad03b78dd","fromNode":"5f98acc6c63064e7","fromSide":"bottom","toNode":"ec787ff3d207367a","toSide":"top","label":"Yes"},
+		{"id":"13a5e3f29e778419","fromNode":"ec787ff3d207367a","fromSide":"bottom","toNode":"bc38f04d122d4b17","toSide":"top","label":"No"},
+		{"id":"650c486389e09cd3","fromNode":"ec787ff3d207367a","fromSide":"bottom","toNode":"b3172b7abdeed437","toSide":"top","label":"Yes"},
+		{"id":"b14e8609466a59f5","fromNode":"d4febd4311baf4d6","fromSide":"bottom","toNode":"33d18cc787a19fe4","toSide":"top","label":"No"},
+		{"id":"42d7ea9ae1d9c025","fromNode":"d4febd4311baf4d6","fromSide":"right","toNode":"540d92d6b1aeccc1","toSide":"left","label":"Yes"},
+		{"id":"896af3df7f644eb4","fromNode":"13debdec61fc5165","fromSide":"bottom","toNode":"d6f269bd33b4c1ed","toSide":"top"}
+	]
+}

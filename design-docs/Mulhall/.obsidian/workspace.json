@@ -1,0 +1,244 @@
+{
+  "main": {
+    "id": "4bb567cafe90c675",
+    "type": "split",
+    "children": [
+      {
+        "id": "fd0ba3dd5813c110",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "dd93cb88cf28c8f2",
+            "type": "leaf",
+            "state": {
+              "type": "canvas",
+              "state": {
+                "file": "Events/Event Flows.canvas",
+                "viewState": {
+                  "x": -310,
+                  "y": -287,
+                  "zoom": 0
+                }
+              },
+              "icon": "lucide-layout-dashboard",
+              "title": "Event Flows"
+            }
+          },
+          {
+            "id": "f7e2cff47526e211",
+            "type": "leaf",
+            "state": {
+              "type": "canvas",
+              "state": {
+                "file": "Events/Invitation Flow.canvas",
+                "viewState": {
+                  "x": -429,
+                  "y": -192,
+                  "zoom": 0
+                }
+              },
+              "icon": "lucide-layout-dashboard",
+              "title": "Invitation Flow"
+            }
+          },
+          {
+            "id": "4937c99ab87c2faf",
+            "type": "leaf",
+            "state": {
+              "type": "canvas",
+              "state": {
+                "file": "Brainstorming/Roles + Functions.canvas",
+                "viewState": {
+                  "x": -1150,
+                  "y": -751,
+                  "zoom": 0
+                }
+              },
+              "icon": "lucide-layout-dashboard",
+              "title": "Roles + Functions"
+            }
+          }
+        ],
+        "currentTab": 1
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "73d38eac6acbf751",
+    "type": "split",
+    "children": [
+      {
+        "id": "b1991fd2ca227392",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "a875d3fdce5d6dd9",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-folder-closed",
+              "title": "Files"
+            }
+          },
+          {
+            "id": "a5028a8a97115fc7",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              },
+              "icon": "lucide-search",
+              "title": "Search"
+            }
+          },
+          {
+            "id": "d5b24c195b4de884",
+            "type": "leaf",
+            "state": {
+              "type": "bookmarks",
+              "state": {},
+              "icon": "lucide-bookmark",
+              "title": "Bookmarks"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "9be498d787263842",
+    "type": "split",
+    "children": [
+      {
+        "id": "9fe0409f0cda6cdd",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "0e881762704b544c",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Events/Event Flows.canvas",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-coming-in",
+              "title": "Backlinks for Event Flows"
+            }
+          },
+          {
+            "id": "91dbf2bee802ab1f",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Events/Event Flows.canvas",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              },
+              "icon": "links-going-out",
+              "title": "Outgoing links from Event Flows"
+            }
+          },
+          {
+            "id": "383f3bf9537f4613",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              },
+              "icon": "lucide-tags",
+              "title": "Tags"
+            }
+          },
+          {
+            "id": "60d9e087d51b8e9f",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Events/Event Flows.canvas"
+              },
+              "icon": "lucide-list",
+              "title": "Outline of Event Flows"
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "left-ribbon": {
+    "hiddenItems": {
+      "switcher:Open quick switcher": false,
+      "graph:Open graph view": false,
+      "canvas:Create new canvas": false,
+      "daily-notes:Open today's daily note": false,
+      "templates:Insert template": false,
+      "command-palette:Open command palette": false
+    }
+  },
+  "active": "f7e2cff47526e211",
+  "lastOpenFiles": [
+    "Brainstorming/Roles + Functions.canvas",
+    "Data Models/User.md",
+    "Events/Invitation Flow.canvas",
+    "Events/Event Flows.canvas",
+    "Rules/Determining Winner(s).canvas",
+    "Data Models/Invited User.md",
+    "Events/Invitation Flow.md",
+    "Data Models/Entry.md",
+    "Data Models/Schedule.md",
+    "Data Models/AuditEvent.md",
+    "Data Models/Contestant.md",
+    "Data Models/Team.md",
+    "Brainstorming/Contestant Statuses.canvas",
+    "Brainstorming/Roles + Functions.md",
+    "this.md",
+    "Views/My Picks by Week.canvas",
+    "Data Models",
+    "Views/img/my-picks-by-week-mockup.png",
+    "Views/img/weekly-picks-mockup.png",
+    "Views/Weekly Picks.canvas",
+    "Views/img",
+    "Views",
+    "Rules",
+    "Brainstorming/Concepts.canvas",
+    "Events/Event Flow.md",
+    "Events",
+    "u9fltoslqdsyao8cpm0k.webp",
+    "ayvwcmluj2ohkdlbiegi.webp",
+    "Welcome.md",
+    "xujg9t3t4u5nmjgr54wx.webp",
+    "xymxwrxtyj9fhaemhdyd.webp",
+    "vdqo4iiufmdrimkaxslj.webp",
+    "NYJ.webp",
+    "pln44vuzugjgipyidsre.webp",
+    "grhjkahghjkk17v43hdx.webp",
+    "Admin.md",
+    "Brainstorming/Untitled.md",
+    "Brainstorming"
+  ]
+}

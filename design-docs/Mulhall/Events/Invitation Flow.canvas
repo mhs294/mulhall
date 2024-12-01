@@ -1,0 +1,34 @@
+{
+	"nodes":[
+		{"id":"acaa6128fab4d5e0","type":"text","text":"## Invitation Sent","x":-700,"y":-220,"width":320,"height":60,"color":"5"},
+		{"id":"20f7dcec327c82bc","type":"text","text":"## Invitation Expires","x":120,"y":-220,"width":320,"height":60,"color":"5"},
+		{"id":"1e8c4c35690ff1b2","type":"text","text":"- Email with invitation link sent to designated account recipient","x":-300,"y":-239,"width":280,"height":98},
+		{"id":"9a7e85e4d2db0624","type":"text","text":"## Invitation Accepted","x":-700,"y":11,"width":320,"height":60,"color":"5"},
+		{"id":"2c40c10f66457394","type":"text","text":"- User is prompted to create and verify a password for their account (keyed by email address)","x":-300,"y":-38,"width":280,"height":159},
+		{"id":"5a93917d2c82f415","type":"text","text":"## Participant Created","x":-700,"y":-480,"width":320,"height":60,"color":"5"},
+		{"id":"77726b560affc274","type":"text","text":"- New User added as Viewer of new Participant","x":-1060,"y":-380,"width":300,"height":80},
+		{"id":"f6f7e263f36d5de9","type":"text","text":"### Is new User for an existing Participant?","x":-680,"y":-660,"width":280,"height":96,"color":"3"},
+		{"id":"8486256ad970e2bc","type":"text","text":"## User Added","x":-700,"y":-869,"width":320,"height":60,"color":"5"},
+		{"id":"df1a2c54600576a1","type":"text","text":"- New Participant created\n- New User added as Owner of new Participant","x":-300,"y":-499,"width":300,"height":99},
+		{"id":"bc0bdce3b7213c67","type":"text","text":"## User Activated","x":-700,"y":269,"width":320,"height":60,"color":"5"},
+		{"id":"915463c5a402175b","type":"text","text":"- User Invitation record deactivated\n- User record activated\n- User can now login through main page","x":-300,"y":220,"width":280,"height":159},
+		{"id":"acdd2c5d1b76066d","type":"text","text":"- User record created in deactivated state\n- User Invitation record created","x":-300,"y":-888,"width":360,"height":99},
+		{"id":"66e32ca4bc21e29c","type":"text","text":"- User Invitation record deactivated\n- Invitation will need to be resent (new code created when User Invitation record re-activated)","x":500,"y":-289,"width":300,"height":199}
+	],
+	"edges":[
+		{"id":"973dea82ecafd2f5","fromNode":"acaa6128fab4d5e0","fromSide":"right","toNode":"1e8c4c35690ff1b2","toSide":"left"},
+		{"id":"dc05675a939398af","fromNode":"1e8c4c35690ff1b2","fromSide":"right","toNode":"20f7dcec327c82bc","toSide":"left","label":"7 days"},
+		{"id":"2d2b2bf2abd5115e","fromNode":"20f7dcec327c82bc","fromSide":"right","toNode":"66e32ca4bc21e29c","toSide":"left"},
+		{"id":"fb58d55efcbf8123","fromNode":"1e8c4c35690ff1b2","fromSide":"bottom","toNode":"9a7e85e4d2db0624","toSide":"top","label":"Link Clicked"},
+		{"id":"cc837e14cfed287b","fromNode":"9a7e85e4d2db0624","fromSide":"right","toNode":"2c40c10f66457394","toSide":"left"},
+		{"id":"204f9537ccbf3c54","fromNode":"5a93917d2c82f415","fromSide":"right","toNode":"df1a2c54600576a1","toSide":"left"},
+		{"id":"350eec0854049e41","fromNode":"8486256ad970e2bc","fromSide":"right","toNode":"acdd2c5d1b76066d","toSide":"left"},
+		{"id":"da8c75b85ac07757","fromNode":"acdd2c5d1b76066d","fromSide":"bottom","toNode":"f6f7e263f36d5de9","toSide":"top"},
+		{"id":"52d0054e50eab758","fromNode":"df1a2c54600576a1","fromSide":"bottom","toNode":"acaa6128fab4d5e0","toSide":"top"},
+		{"id":"06ffebf3427c850b","fromNode":"f6f7e263f36d5de9","fromSide":"left","toNode":"77726b560affc274","toSide":"top","label":"Yes"},
+		{"id":"d2d909c0f71d9ef9","fromNode":"77726b560affc274","fromSide":"bottom","toNode":"acaa6128fab4d5e0","toSide":"left"},
+		{"id":"f6c0ee13f818b311","fromNode":"f6f7e263f36d5de9","fromSide":"bottom","toNode":"5a93917d2c82f415","toSide":"top","label":"No"},
+		{"id":"06528f915b9bcee4","fromNode":"2c40c10f66457394","fromSide":"bottom","toNode":"bc0bdce3b7213c67","toSide":"top"},
+		{"id":"6edb07e9a57ce787","fromNode":"bc0bdce3b7213c67","fromSide":"right","toNode":"915463c5a402175b","toSide":"left"}
+	]
+}

@@ -1,0 +1,10 @@
+{
+	"nodes":[
+		{"id":"a91e6c9e7b1908b0","type":"file","file":"Views/img/weekly-picks-mockup.png","x":-280,"y":-400,"width":540,"height":782},
+		{"id":"17f88b9ce6b31d26","type":"text","text":"Tap/Click to Suggest","x":300,"y":100,"width":250,"height":60},
+		{"id":"2f9343afa66b1ec1","type":"text","text":"Drag into Selected Pick area to select","x":300,"y":-100,"width":250,"height":60},
+		{"id":"f0d59617c59958e5","type":"text","text":"Drag outside of area to remove","x":-560,"y":-100,"width":250,"height":58},
+		{"id":"a900871659eedbee","type":"text","text":"Drag outside of area to remove","x":-560,"y":-240,"width":250,"height":60}
+	],
+	"edges":[]
+}
