@@ -1,7 +1,6 @@
 package views
 
 import (
-    "fmt"
     "github.com/mhs294/mulhall/internals/types"
     "github.com/mhs294/mulhall/views/components"
 )
@@ -44,7 +43,7 @@ templ Index(teams []types.Team) {
                         // LOOP THROUGH THE TEAMS
                         <ul id="team-list">
                             for _, team := range teams {
-                                <li class="p-2" id={ fmt.Sprintf("%s", team.ID) }>
+                                <li class="p-2" id={ string(team.ID) }>
                                     @components.TeamButton(team)
                                 </li>
                             }

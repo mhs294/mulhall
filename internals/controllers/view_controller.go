@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"time"
 
 	"github.com/a-h/templ"
 	"github.com/gin-gonic/gin"
@@ -31,7 +30,7 @@ func (c *ViewController) RegisterHandlers(e *gin.Engine) {
 }
 
 func (c *ViewController) index(ctx *gin.Context) {
-	_, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	_, cancel := context.WithTimeout(context.Background(), env.Timeout)
 	defer cancel()
 
 	teams := c.TeamRepo.GetAllTeams()

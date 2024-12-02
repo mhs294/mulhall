@@ -3,9 +3,12 @@ package env
 import (
 	"fmt"
 	"os"
+	"time"
 )
 
 var MongoDBConnStr string
+var Timeout time.Duration
+var InviteExpiration time.Duration
 
 func LoadVars() error {
 	var err error
@@ -13,6 +16,10 @@ func LoadVars() error {
 	if err != nil {
 		return err
 	}
+
+	// TODO - make these configurable
+	Timeout = time.Second * 10
+	InviteExpiration = time.Hour * 24 * 7
 
 	return nil
 }

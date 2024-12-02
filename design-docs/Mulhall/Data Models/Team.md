@@ -1,4 +1,4 @@
-Represents an NFL team that is available for Participants to Select as a Pick.
+Represents an NFL team that is available for Contestant to Select as a Pick.
 Pre-defined, static content (barring any changes to the NFL itself).
 
 - ID `primary key`

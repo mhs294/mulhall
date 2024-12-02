@@ -9,7 +9,6 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import (
-	"fmt"
 	"github.com/mhs294/mulhall/internals/types"
 	"github.com/mhs294/mulhall/views/components"
 )
@@ -53,9 +52,9 @@ func Index(teams []types.Team) templ.Component {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var2 string
-			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%s", team.ID))
+			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(string(team.ID))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/index.templ`, Line: 48, Col: 79}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/index.templ`, Line: 46, Col: 68}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 			if templ_7745c5c3_Err != nil {

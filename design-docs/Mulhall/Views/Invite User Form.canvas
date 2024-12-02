@@ -1,0 +1,9 @@
+{
+	"nodes":[
+		{"id":"864b113f0a7222ba","type":"file","file":"invite-user-mockup.png","x":-420,"y":-320,"width":808,"height":420},
+		{"id":"83e1e884b2e24939","type":"text","text":"Populated with Contestants user is authorized to update","x":400,"y":-180,"width":400,"height":70},
+		{"id":"65f433687fc50e93","type":"text","text":"Populated with roles available to invited user\n- New team/Team with no owner = Owner\n- Existing team = Manager/Viewer","x":400,"y":-100,"width":400,"height":135},
+		{"id":"a12ce138acbc2861","type":"text","text":"Validated against existing users/invites to ensure account does not already exist","x":-840,"y":-35,"width":400,"height":70}
+	],
+	"edges":[]
+}
