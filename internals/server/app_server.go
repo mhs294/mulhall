@@ -8,15 +8,18 @@ import (
 	"github.com/mhs294/mulhall/internals/middleware"
 )
 
+// Controller is a type that has HTTP method handlers capable of being registered with the app server engine.
 type Controller interface {
 	RegisterHandlers(e *gin.Engine)
 }
 
+// AppServer represents the backend server responsible for serving views to the end user
+// as well as handling HTTP API requests to facilitate user workflows in the web application.
 type AppServer struct {
-	Router      *gin.Engine
-	Controllers []Controller
+	Router *gin.Engine
 }
 
+// NewAppServer constructs a new instance of an AppServer and returns a pointer to it.
 func NewAppServer() (*AppServer, error) {
 	r := initRouter()
 	conts, err := initControllers()
@@ -28,9 +31,10 @@ func NewAppServer() (*AppServer, error) {
 		c.RegisterHandlers(r)
 	}
 
-	return &AppServer{Router: r, Controllers: conts}, nil
+	return &AppServer{Router: r}, nil
 }
 
+// Start runs the application server.
 func (s *AppServer) Start() {
 	// Port must match EXPOSE command in Dockerfile
 	s.Router.Run("0.0.0.0:8080")

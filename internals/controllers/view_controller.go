@@ -12,10 +12,12 @@ import (
 	"github.com/mhs294/mulhall/views"
 )
 
+// ViewController is responsible for serving HTML views to the end user via HTTP.
 type ViewController struct {
 	TeamRepo *db.TeamRepository
 }
 
+// NewViewController creates a new instance of a ViewController and returns a pointer to it.
 func NewViewController() (*ViewController, error) {
 	teamRepo, err := db.NewTeamRepository(env.MongoDBConnStr)
 	if err != nil {
@@ -25,6 +27,7 @@ func NewViewController() (*ViewController, error) {
 	return &ViewController{TeamRepo: teamRepo}, nil
 }
 
+// RegisterHandlers defines this controller's HTTP routes and their corresponding handler functions.
 func (c *ViewController) RegisterHandlers(e *gin.Engine) {
 	e.GET("/", c.index)
 }

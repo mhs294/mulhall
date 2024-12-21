@@ -18,6 +18,7 @@ type InviteRepository struct {
 }
 
 // NewInviteRepository creates a new InviteRepository instance and returns a pointer to it.
+//
 // connStr is the connection string for the MongoDB instance (e.g. - "mongodb+srv://{user}:{pass}@myinstance.mongodb.net/").
 func NewInviteRepository(connStr string) (*InviteRepository, error) {
 	// Create a new client and connect to the server
@@ -45,6 +46,7 @@ func NewInviteRepository(connStr string) (*InviteRepository, error) {
 }
 
 // InsertInvite inserts the provided Invite into the database.
+//
 // inv is the Invite to insert into the database.
 func (ir *InviteRepository) InsertInvite(inv *types.Invite) error {
 	// Create a new client and connect to the server
@@ -85,8 +87,10 @@ func (ir *InviteRepository) InsertInvite(inv *types.Invite) error {
 	return nil
 }
 
-// GetInviteForEmail returns the Invite for the provided email address and token (or an error if no such Invite exists).
+// GetInviteForEmail returns the Invite for the provided email address and token (or nil if no such Invite exists).
+//
 // email is the email address to look up the Invite for.
+//
 // token is the token string that should match with the email on the Invite.
 func (ir *InviteRepository) GetInvite(email string, token string) (*types.Invite, error) {
 	// Create a new client and connect to the server
@@ -120,7 +124,7 @@ func (ir *InviteRepository) GetInvite(email string, token string) (*types.Invite
 
 	// Verify that only one Invite was unpacked from the cursor
 	if len(invites) == 0 {
-		return nil, fmt.Errorf("no invite exists for email=%s token=%s", email, token)
+		return nil, nil
 	} else if len(invites) != 1 {
 		return nil, fmt.Errorf("multiple invites exists for email=%s token=%s", email, token)
 	}
@@ -129,7 +133,9 @@ func (ir *InviteRepository) GetInvite(email string, token string) (*types.Invite
 }
 
 // AcceptInvite updates the Accepted property of the Invite keyed by the provided ID to be true
-func (ir *InviteRepository) AcceptInvite(id string) error {
+//
+// id is the unique identifier of the Invite being accepted.
+func (ir *InviteRepository) AcceptInvite(id types.InviteID) error {
 	// Create a new client and connect to the server
 	ctx := context.Background()
 	ctx, cancel := context.WithTimeout(ctx, env.Timeout)

@@ -20,7 +20,7 @@ Represents an invitation for a [User](User) to join the Pool, either by an Admin
 	"email": "bob@gmail.com",
 	"invitingUser": "userId1",
 	"token": "19z2tzroufu0mdwyigs0qc92u",
-	"expiration": 
+	"expiration": "2024-12-25T00:00:00.000Z"
 	"accepted": false
 }
 ```
