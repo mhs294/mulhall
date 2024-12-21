@@ -9,6 +9,7 @@ import (
 	"github.com/mhs294/mulhall/internals/types"
 )
 
+// InviteController is responsible for handling requests for Invite HTTP APIs.
 type InviteController struct {
 	logger        *log.Logger
 	inviteService *services.InviteService
@@ -23,6 +24,7 @@ func NewInviteController(l *log.Logger, s *services.InviteService) *InviteContro
 	return &InviteController{logger: l, inviteService: s}
 }
 
+// RegisterHandlers defines this controller's HTTP routes and their corresponding handler functions.
 func (c *InviteController) RegisterHandlers(e *gin.Engine) {
 	invs := e.Group("/invites")
 	{
