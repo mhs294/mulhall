@@ -42,7 +42,15 @@ func Index(teams []types.Team) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<body><main class=\"min-h-screen w-full\"><nav class=\"flex w-full border border-b-zinc-200 px-4 py-4\"><h3 class=\"text-base lg:text-lg font-medium text-center\">Mulhall</h3></nav><div class=\"mt-6 w-full flex justify-center items-center flex-col\"><form hx-post=\"/\" hx-trigger=\"submit\" hx-swap=\"none\" onsubmit=\"reloadPage()\" class=\"w-96\"><textarea name=\"description\" cols=\"30\" rows=\"2\" class=\"w-full border rounded-lg mb-2 p-4\" placeholder=\"Input team details\" required></textarea> <button class=\"py-1 px-4 w-full h-10 rounded-lg text-white bg-zinc-800\">Create</button></form><section class=\"border-t border-t-zinc-200 mt-6 px-2 py-4 w-96\"><ul id=\"team-list\">")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<body><main class=\"min-h-screen w-full\"><nav class=\"flex w-full border border-b-zinc-200 px-4 py-4\"><h3 class=\"text-base lg:text-lg font-medium text-center\">Mulhall</h3></nav><div class=\"mt-6 w-full flex justify-center items-center flex-col\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = components.RegisterForm().Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<section class=\"border-t border-t-zinc-200 mt-6 px-2 py-4 w-96\"><ul id=\"team-list\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -54,7 +62,7 @@ func Index(teams []types.Team) templ.Component {
 			var templ_7745c5c3_Var2 string
 			templ_7745c5c3_Var2, templ_7745c5c3_Err = templ.JoinStringErrs(string(team.ID))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/index.templ`, Line: 46, Col: 68}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `views/index.templ`, Line: 25, Col: 68}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var2))
 			if templ_7745c5c3_Err != nil {

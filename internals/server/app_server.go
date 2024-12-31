@@ -1,10 +1,8 @@
 package server
 
 import (
-	"fmt"
-
 	"github.com/gin-gonic/gin"
-	"github.com/mhs294/mulhall/internals/controllers"
+	"github.com/mhs294/mulhall/internals/ioc"
 	"github.com/mhs294/mulhall/internals/middleware"
 )
 
@@ -22,11 +20,8 @@ type AppServer struct {
 // NewAppServer constructs a new instance of an AppServer and returns a pointer to it.
 func NewAppServer() (*AppServer, error) {
 	r := initRouter()
-	conts, err := initControllers()
-	if err != nil {
-		return nil, fmt.Errorf("failed to create new AppServer: %v", err)
-	}
 
+	conts := initControllers()
 	for _, c := range conts {
 		c.RegisterHandlers(r)
 	}
@@ -52,15 +47,11 @@ func initRouter() *gin.Engine {
 	return r
 }
 
-func initControllers() ([]Controller, error) {
+func initControllers() []Controller {
 	conts := make([]Controller, 0)
+	conts = append(conts, ioc.InviteController())
+	conts = append(conts, ioc.AccountController())
+	conts = append(conts, ioc.ViewController())
 
-	// ViewController
-	viewCon, err := controllers.NewViewController()
-	if err != nil {
-		return nil, err
-	}
-	conts = append(conts, viewCon)
-
-	return conts, nil
+	return conts
 }

@@ -11,3 +11,10 @@ type CreateInviteRequest struct {
 	Role        roles.Role   `json:"role"`
 	InvtingUser UserID       `json:"invitingUserId"`
 }
+
+// RegisterAccountRequest contains all of the information necessary to register an account for a new User.
+type RegisterAccountRequest struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
+	Confirm  string `json:"confirm"`
+}

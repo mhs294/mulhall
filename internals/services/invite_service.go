@@ -4,21 +4,21 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/mhs294/mulhall/internals/db"
 	"github.com/mhs294/mulhall/internals/env"
+	"github.com/mhs294/mulhall/internals/repos"
 	"github.com/mhs294/mulhall/internals/types"
 	"github.com/mhs294/mulhall/internals/utils"
 )
 
 // InviteService represents a service for interacting with User Invites for the site.
 type InviteService struct {
-	inviteRepository *db.InviteRepository
+	inviteRepository *repos.InviteRepository
 }
 
 // NewInviteService creates a new instance of an InviteService and returns a pointer to it.
 //
 // ir is the pointer to the InviteRepository that will be used at runtime by the InviteService.
-func NewInviteService(ir *db.InviteRepository) *InviteService {
+func NewInviteService(ir *repos.InviteRepository) *InviteService {
 	return &InviteService{inviteRepository: ir}
 }
 

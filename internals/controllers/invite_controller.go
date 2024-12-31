@@ -26,10 +26,10 @@ func NewInviteController(l *log.Logger, s *services.InviteService) *InviteContro
 
 // RegisterHandlers defines this controller's HTTP routes and their corresponding handler functions.
 func (c *InviteController) RegisterHandlers(e *gin.Engine) {
-	invs := e.Group("/invites")
+	inv := e.Group("/invite")
 	{
-		invs.POST("/validate", c.validateInvite)
-		invs.POST("/accept", c.acceptInvite)
+		inv.POST("/validate", c.validateInvite)
+		inv.POST("/accept", c.acceptInvite)
 	}
 }
 

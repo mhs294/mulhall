@@ -1,0 +1,33 @@
+package components
+
+templ RegisterForm() {
+    <div id="register-form">
+        <form hx-post="/account/register" hx-ext="json-enc" class="w-96">
+            <div>
+                <label for="email" class="text-xl">
+                    Email:
+                </label>
+                <input type="text" name="email" maxlength="100" class="w-full border rounded-lg mb-2 p-4">
+            </div>
+            <div>
+                <label for="password" class="text-xl">
+                    Password:
+                </label>
+                <input type="password" name="password" maxlength="100" class="w-full border rounded-lg mb-2 p-4">
+            </div>
+            <div>
+                <label for="confirm" class="text-xl">
+                    Confirm Password:
+                </label>
+                <input type="password" name="confirm" maxlength="100" class="w-full border rounded-lg mb-2 p-4">
+            </div>
+            <div>
+                <button type="submit" class="py-1 px-4 w-full h-10 rounded-lg text-white bg-zinc-800">
+                    Create Account
+                </button>
+            </div>
+
+            <div id="errors"></div>
+        </form>
+    </div>
+}

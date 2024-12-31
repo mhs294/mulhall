@@ -1,16 +1,32 @@
 package components
 
+import (
+    "fmt"
+)
+
+const htmxVersion = "1.9.10"
+
 templ Header() {
     <head>
+        // HTMX Core
         <script
-            src="https://unpkg.com/htmx.org@1.9.10"
+            src={ fmt.Sprintf("https://unpkg.com/htmx.org@%s", htmxVersion) } 
             integrity="sha384-D1Kt99CQMDuVetoL1lrYwg5t+9QdHe7NLX/SoJYkXDFfX37iInKRy5xLSi8nO7UC"
             crossorigin="anonymous"
         ></script>
+
+        // HTMX Extensions
+        <script src={ fmt.Sprintf("https://unpkg.com/htmx.org@%s/dist/ext/json-enc.js", htmxVersion) }></script>
+
+        // External CSS
         <script src="https://cdn.tailwindcss.com"></script>
+
+        // Internal CSS
         <link rel="stylesheet" type="text/css" href="/static/css/team_button.css">
+
+        // Metadata
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>GO Fullstack</title>
+        <title>Mulhall</title>
     </head>
 }
