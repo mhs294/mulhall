@@ -23,16 +23,15 @@ func NewInviteRepository(mdb *db.MongoDB) *InviteRepository {
 }
 
 // TestConnection tests the connection to the MongoDB instance and returns any error that occurs.
-func (ir *InviteRepository) TestConnection() error {
-	return ir.mdb.TestConnection(ir.dbName)
+func (r *InviteRepository) TestConnection() error {
+	return r.mdb.TestConnection(r.dbName)
 }
 
 // InsertInvite inserts the provided Invite into the database.
 //
 // inv is the Invite to insert into the database.
-func (ir *InviteRepository) InsertInvite(inv *types.Invite) error {
-	// Insert the BSON map into the invites collection as a document
-	if err := ir.mdb.InsertOne(ir.dbName, ir.collName, inv); err != nil {
+func (r *InviteRepository) InsertInvite(inv *types.Invite) error {
+	if err := r.mdb.InsertOne(r.dbName, r.collName, inv); err != nil {
 		return fmt.Errorf("failed to insert invite: %v", err)
 	}
 
@@ -44,10 +43,10 @@ func (ir *InviteRepository) InsertInvite(inv *types.Invite) error {
 // email is the email address to look up the Invite for.
 //
 // token is the token string that should match with the email on the Invite.
-func (ir *InviteRepository) GetInvite(email string, token string) (*types.Invite, error) {
-	// Load invite from the database
+func (r *InviteRepository) GetInvite(email string, token string) (*types.Invite, error) {
+	// Load Invite from the database
 	var invites []types.Invite
-	if err := ir.mdb.GetAll(ir.dbName, ir.collName, bson.D{{Key: "email", Value: email}}, &invites); err != nil {
+	if err := r.mdb.GetAll(r.dbName, r.collName, bson.D{{Key: "email", Value: email}}, &invites); err != nil {
 		return nil, fmt.Errorf("failed to load invite")
 	}
 
@@ -64,7 +63,7 @@ func (ir *InviteRepository) GetInvite(email string, token string) (*types.Invite
 // AcceptInvite updates the Accepted property of the Invite keyed by the provided ID to be true
 //
 // id is the unique identifier of the Invite being accepted.
-func (ir *InviteRepository) AcceptInvite(id types.InviteID) error {
+func (r *InviteRepository) AcceptInvite(id types.InviteID) error {
 	// Define the update operation and filter
 	filter := bson.M{"id": id}
 	update := bson.M{
@@ -74,7 +73,7 @@ func (ir *InviteRepository) AcceptInvite(id types.InviteID) error {
 	}
 
 	// Perform the update
-	if err := ir.mdb.UpdateOne(ir.dbName, ir.collName, filter, update); err != nil {
+	if err := r.mdb.UpdateOne(r.dbName, r.collName, filter, update); err != nil {
 		return fmt.Errorf("failed to accept invite (id=%s): %v", id, err)
 	}
 

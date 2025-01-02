@@ -11,7 +11,7 @@ import (
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
-// MongoDB represents a MongoDB database and abstracts the various operations it provides.
+// MongoDB represents a MongoDB instance and abstracts the various operations it provides.
 type MongoDB struct {
 	connStr string
 	timeout time.Duration
@@ -47,7 +47,8 @@ func (mdb *MongoDB) TestConnection(dbName string) error {
 	}()
 
 	// Test the client connection
-	if err := testClient(client, dbName, ctx); err != nil {
+	var result bson.M
+	if err := client.Database(dbName).RunCommand(ctx, bson.D{{Key: "ping", Value: 1}}).Decode(&result); err != nil {
 		return fmt.Errorf("database connection test failed: %v", err)
 	}
 
@@ -190,13 +191,4 @@ func createClient(connStr string, ctx context.Context) (*mongo.Client, error) {
 	}
 
 	return client, nil
-}
-
-func testClient(c *mongo.Client, db string, ctx context.Context) error {
-	var result bson.M
-	if err := c.Database(db).RunCommand(ctx, bson.D{{Key: "ping", Value: 1}}).Decode(&result); err != nil {
-		return err
-	}
-
-	return nil
 }

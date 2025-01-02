@@ -17,9 +17,9 @@ type InviteService struct {
 
 // NewInviteService creates a new instance of an InviteService and returns a pointer to it.
 //
-// ir is the pointer to the InviteRepository that will be used at runtime by the InviteService.
-func NewInviteService(ir *repos.InviteRepository) *InviteService {
-	return &InviteService{inviteRepository: ir}
+// r is the InviteRepository that will be used at runtime by the InviteService.
+func NewInviteService(r *repos.InviteRepository) *InviteService {
+	return &InviteService{inviteRepository: r}
 }
 
 // CreateInvite creates a new Invite from the provided information and returns a pointer to it.

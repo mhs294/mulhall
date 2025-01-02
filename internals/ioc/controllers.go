@@ -5,7 +5,7 @@ import (
 )
 
 var inviteCont *controllers.InviteController
-var accountCont *controllers.AccountController
+var accountCont *controllers.UserController
 var viewCont *controllers.ViewController
 
 func InviteController() *controllers.InviteController {
@@ -18,11 +18,11 @@ func InviteController() *controllers.InviteController {
 	return inviteCont
 }
 
-func AccountController() *controllers.AccountController {
+func AccountController() *controllers.UserController {
 	if accountCont == nil {
 		logger := Logger()
 		service := AccountService()
-		accountCont = controllers.NewAccountController(logger, service)
+		accountCont = controllers.NewUserController(logger, service)
 	}
 
 	return accountCont

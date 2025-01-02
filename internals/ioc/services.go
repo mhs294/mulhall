@@ -5,7 +5,7 @@ import (
 )
 
 var inviteService *services.InviteService
-var accountService *services.AccountService
+var userService *services.UserService
 
 func InviteService() *services.InviteService {
 	if inviteService == nil {
@@ -16,11 +16,11 @@ func InviteService() *services.InviteService {
 	return inviteService
 }
 
-func AccountService() *services.AccountService {
-	if accountService == nil {
+func UserService() *services.UserService {
+	if userService == nil {
 		// TODO - replace this with real service
-		accountService = &services.AccountService{}
+		userService = &services.UserService{}
 	}
 
-	return accountService
+	return userService
 }

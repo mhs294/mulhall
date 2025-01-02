@@ -26,21 +26,21 @@ func NewTeamRepository(mdb *db.MongoDB) *TeamRepository {
 }
 
 // TestConnection tests the connection to the MongoDB instance and returns any error that occurs.
-func (tr *TeamRepository) TestConnection() error {
-	return tr.mdb.TestConnection(tr.dbName)
+func (r *TeamRepository) TestConnection() error {
+	return r.mdb.TestConnection(r.dbName)
 }
 
 // GetAllTeams returns a slice of all available Teams, sorted by their location shorthand.
-func (tr *TeamRepository) GetAllTeams() ([]types.Team, error) {
-	if tr.teams == nil {
-		err := tr.loadTeams()
+func (r *TeamRepository) GetAllTeams() ([]types.Team, error) {
+	if r.teams == nil {
+		err := r.loadTeams()
 		if err != nil {
 			return nil, err
 		}
 	}
 
-	teams := make([]types.Team, 0, len(tr.teams))
-	for _, t := range tr.teams {
+	teams := make([]types.Team, 0, len(r.teams))
+	for _, t := range r.teams {
 		teams = append(teams, t)
 	}
 	sort.Slice(teams, func(i, j int) bool {
@@ -51,26 +51,26 @@ func (tr *TeamRepository) GetAllTeams() ([]types.Team, error) {
 }
 
 // GetTeam returns the Team keyed by the specified ID (or an empty Team if no such Team exists).
-func (tr *TeamRepository) GetTeam(id types.TeamID) (types.Team, error) {
-	if tr.teams == nil {
-		err := tr.loadTeams()
+func (r *TeamRepository) GetTeam(id types.TeamID) (types.Team, error) {
+	if r.teams == nil {
+		err := r.loadTeams()
 		if err != nil {
 			return types.Team{}, err
 		}
 	}
 
-	return tr.teams[id], nil
+	return r.teams[id], nil
 }
 
-func (tr *TeamRepository) loadTeams() error {
+func (r *TeamRepository) loadTeams() error {
 	var teams []types.Team
-	if err := tr.mdb.GetAll(tr.dbName, tr.collName, bson.D{}, &teams); err != nil {
+	if err := r.mdb.GetAll(r.dbName, r.collName, bson.D{}, &teams); err != nil {
 		return fmt.Errorf("failed to load teams from database: %v", err)
 	}
 
-	tr.teams = make(map[types.TeamID]types.Team, len(teams))
+	r.teams = make(map[types.TeamID]types.Team, len(teams))
 	for _, t := range teams {
-		tr.teams[t.ID] = t
+		r.teams[t.ID] = t
 	}
 
 	return nil

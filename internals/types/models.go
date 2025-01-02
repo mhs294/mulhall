@@ -15,7 +15,7 @@ type Team struct {
 	Name      string `json:"name"`
 }
 
-// User represents an individual person within the site.
+// User represents an individual person within the site and their account details.
 type User struct {
 	ID            UserID `json:"id"`
 	Email         string `json:"email"`
