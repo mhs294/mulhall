@@ -18,10 +18,10 @@ func InviteController() *controllers.InviteController {
 	return inviteCont
 }
 
-func AccountController() *controllers.UserController {
+func UserController() *controllers.UserController {
 	if accountCont == nil {
 		logger := Logger()
-		service := AccountService()
+		service := UserService()
 		accountCont = controllers.NewUserController(logger, service)
 	}
 

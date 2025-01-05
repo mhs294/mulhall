@@ -50,7 +50,7 @@ func initRouter() *gin.Engine {
 func initControllers() []Controller {
 	conts := make([]Controller, 0)
 	conts = append(conts, ioc.InviteController())
-	conts = append(conts, ioc.AccountController())
+	conts = append(conts, ioc.UserController())
 	conts = append(conts, ioc.ViewController())
 
 	return conts
