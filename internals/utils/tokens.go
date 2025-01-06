@@ -16,7 +16,7 @@ func CreateAlphaNumToken(length int) string {
 //
 // length is the the desired amount of characters to use when creating the token.
 func CreateToken(length int) string {
-	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_+"
+	const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*()-_+~`|,<.>?/;:"
 	return createToken(charset, length)
 }
 

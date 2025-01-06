@@ -15,6 +15,13 @@ type CreateInviteRequest struct {
 // RegisterUserRequest contains all of the information necessary to register an account for a new User.
 type RegisterUserRequest struct {
 	Email    string `json:"email"`
+	Token    string `json:"token"`
 	Password string `json:"password"`
 	Confirm  string `json:"confirm"`
+}
+
+// RegisterUserRequest contains all of the information necessary to log in a User.
+type LoginRequest struct {
+	Email    string `json:"email"`
+	Password string `json:"password"`
 }

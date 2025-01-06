@@ -50,3 +50,9 @@ type Invite struct {
 	Expiration   time.Time    `json:"expiration"`
 	Accepted     bool         `json:"accepted"`
 }
+
+// Session represents an authentication session for a logged in user.
+type Session struct {
+	ID      SessionID
+	Expires time.Time
+}

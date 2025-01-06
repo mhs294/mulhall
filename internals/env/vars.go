@@ -9,6 +9,7 @@ import (
 var MongoDBConnStr string
 var Timeout time.Duration
 var InviteExpiration time.Duration
+var SessionExpiration time.Duration
 
 func LoadVars() error {
 	var err error
@@ -20,6 +21,7 @@ func LoadVars() error {
 	// TODO - make these configurable
 	Timeout = time.Second * 10
 	InviteExpiration = time.Hour * 24 * 7
+	SessionExpiration = time.Hour * 24 * 7
 
 	return nil
 }

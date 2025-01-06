@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/mhs294/mulhall/internals/env"
 	"github.com/mhs294/mulhall/internals/repos"
 	"github.com/mhs294/mulhall/internals/types"
@@ -12,14 +13,14 @@ import (
 
 // InviteService represents a service for interacting with User Invites for the site.
 type InviteService struct {
-	inviteRepository *repos.InviteRepository
+	invRepo *repos.InviteRepository
 }
 
 // NewInviteService creates a new instance of an InviteService and returns a pointer to it.
 //
 // r is the InviteRepository that will be used at runtime by the InviteService.
 func NewInviteService(r *repos.InviteRepository) *InviteService {
-	return &InviteService{inviteRepository: r}
+	return &InviteService{invRepo: r}
 }
 
 // CreateInvite creates a new Invite from the provided information and returns a pointer to it.
@@ -28,25 +29,28 @@ func NewInviteService(r *repos.InviteRepository) *InviteService {
 func (s *InviteService) CreateInvite(req *types.CreateInviteRequest) (*types.Invite, error) {
 	// Create the Invite with a randomly generated validation token
 	token := utils.CreateAlphaNumToken(64)
-	invite := &types.Invite{
+	inv := &types.Invite{
+		ID:           types.InviteID(uuid.New().String()),
 		Email:        req.Email,
 		Contestant:   req.Contestant,
 		Role:         req.Role,
 		InvitingUser: req.InvtingUser,
 		Token:        token,
-		Expiration:   time.Now().Add(env.InviteExpiration),
+		Expiration:   time.Now().UTC().Add(env.InviteExpiration),
 		Accepted:     false,
 	}
 
 	// Insert the Invite into the database
-	if err := s.inviteRepository.InsertInvite(invite); err != nil {
+	if err := s.invRepo.InsertInvite(inv); err != nil {
 		return nil, fmt.Errorf("failed to create invite: %v", err)
 	}
 
-	return invite, nil
+	// TODO - send out email with invitation link
+
+	return inv, nil
 }
 
-// ValidateInvite loads the Invite for the proided email/token combination and
+// ValidateInvite loads the Invite for the provided email/token combination and
 // returns the Invite's unique identifier if it is active.
 // Returns an error if the Invite does not exist for the provided email/token
 // combination, or the Invite has expired.
@@ -55,7 +59,7 @@ func (s *InviteService) CreateInvite(req *types.CreateInviteRequest) (*types.Inv
 //
 // token is the token string that should match with the email on the Invite.
 func (s *InviteService) ValidateInvite(email string, token string) (types.InviteID, error) {
-	inv, err := s.inviteRepository.GetInvite(email, token)
+	inv, err := s.invRepo.GetInvite(email, token)
 	if err != nil {
 		return "", err
 	}
@@ -64,26 +68,20 @@ func (s *InviteService) ValidateInvite(email string, token string) (types.Invite
 		return "", &types.InviteNotFoundError{Email: email, Token: token}
 	}
 
-	if inv.Expiration.Before(time.Now()) {
+	if inv.Expiration.Before(time.Now().UTC()) {
 		return "", &types.InviteExpiredError{Email: email, Token: token}
+	}
+
+	if inv.Accepted {
+		return "", &types.InviteAlreadyAcceptedError{Email: email, Token: token}
 	}
 
 	return inv.ID, nil
 }
 
-// AcceptInvite marks the Invite for the provided email/token combination as accepted.
+// AcceptInvite marks the Invite with the provided ID as accepted.
 //
-// Returns an error if the Invite does not exist for the provided email/token
-// combination, or the Invite has expired.
-//
-// email is the email address to look up the Invite for.
-//
-// token is the token string that should match with the email on the Invite.
-func (s *InviteService) AcceptInvite(email string, token string) error {
-	id, err := s.ValidateInvite(email, token)
-	if err != nil {
-		return err
-	}
-
-	return s.inviteRepository.AcceptInvite(id)
+// id is the unique identifier of the Invite being accepted.
+func (s *InviteService) AcceptInvite(id types.InviteID) error {
+	return s.invRepo.AcceptInvite(id)
 }

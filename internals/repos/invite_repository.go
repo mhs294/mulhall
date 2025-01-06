@@ -45,19 +45,19 @@ func (r *InviteRepository) InsertInvite(inv *types.Invite) error {
 // token is the token string that should match with the email on the Invite.
 func (r *InviteRepository) GetInvite(email string, token string) (*types.Invite, error) {
 	// Load Invite from the database
-	var invites []types.Invite
-	if err := r.mdb.GetAll(r.dbName, r.collName, bson.D{{Key: "email", Value: email}}, &invites); err != nil {
+	var invs []types.Invite
+	if err := r.mdb.GetAll(r.dbName, r.collName, bson.D{{Key: "email", Value: email}}, &invs); err != nil {
 		return nil, fmt.Errorf("failed to load invite")
 	}
 
 	// Verify that only one Invite was loaded
-	if len(invites) == 0 {
+	if len(invs) == 0 {
 		return nil, nil
-	} else if len(invites) != 1 {
+	} else if len(invs) != 1 {
 		return nil, fmt.Errorf("multiple invites exists for email=%s token=%s", email, token)
 	}
 
-	return &invites[0], nil
+	return &invs[0], nil
 }
 
 // AcceptInvite updates the Accepted property of the Invite keyed by the provided ID to be true

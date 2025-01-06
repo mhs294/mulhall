@@ -17,7 +17,7 @@ type UserRepository struct {
 
 // NewUserRepository creates a new UserRepository instance and returns a pointer to it.
 //
-// db is the MongoDB instance used by the UserRepository.
+// mdb is the MongoDB instance used by the UserRepository.
 func NewUserRepository(mdb *db.MongoDB) *UserRepository {
 	return &UserRepository{mdb: mdb, dbName: "mulhall", collName: "users"}
 }
@@ -45,7 +45,7 @@ func (r *UserRepository) GetUser(email string) (*types.User, error) {
 	// Load User from the database
 	var users []types.User
 	if err := r.mdb.GetAll(r.dbName, r.collName, bson.D{{Key: "email", Value: email}}, &users); err != nil {
-		return nil, fmt.Errorf("failed to load user")
+		return nil, &types.UserNotFoundError{Email: email}
 	}
 
 	// Verify that only one User was loaded

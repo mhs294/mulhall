@@ -18,8 +18,9 @@ func InviteService() *services.InviteService {
 
 func UserService() *services.UserService {
 	if userService == nil {
-		// TODO - replace this with real service
-		userService = &services.UserService{}
+		invServ := InviteService()
+		repo := UserRepository()
+		userService = services.NewUserService(invServ, repo)
 	}
 
 	return userService

@@ -1,8 +1,10 @@
 package controllers
 
 import (
+	"fmt"
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/mhs294/mulhall/internals/services"
@@ -29,17 +31,51 @@ func NewUserController(l *log.Logger, s *services.UserService) *UserController {
 func (c *UserController) RegisterHandlers(e *gin.Engine) {
 	acc := e.Group("/user")
 	{
-		acc.POST("/register", c.registerUser)
+		acc.POST("/register", c.register)
+		acc.POST("/login", c.login)
 	}
 }
 
-func (c *UserController) registerUser(ctx *gin.Context) {
-	var req types.RegisterUserRequest
+func (c *UserController) register(ctx *gin.Context) {
+	var req *types.RegisterUserRequest
 	if err := utils.FromRequestJSON(&req, ctx); err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		ctx.AbortWithStatus(http.StatusBadRequest)
+		c.logger.Printf("failed to unmarhsal RegisterUserRequest from json: %v", err)
 		return
 	}
 
-	// TODO - replace with call to user service to validate and create new user
-	ctx.JSON(http.StatusOK, req)
+	if _, err := c.userService.Register(req); err != nil {
+		ctx.AbortWithStatus(http.StatusInternalServerError)
+		return
+	}
+
+	ctx.Status(http.StatusOK)
+}
+
+func (c *UserController) login(ctx *gin.Context) {
+	var req *types.LoginRequest
+	if err := utils.FromRequestJSON(&req, ctx); err != nil {
+		ctx.AbortWithStatus(http.StatusBadRequest)
+		c.logger.Printf("failed to unmarhsal LoginRequest from json: %v", err)
+		return
+	}
+
+	sess, err := c.userService.Login(req.Email, req.Password)
+	if err != nil {
+		switch err.(type) {
+		case *types.UserNotFoundError:
+		case *types.PasswordIncorrectError:
+			ctx.AbortWithStatus(http.StatusUnauthorized)
+			return
+		default:
+			ctx.AbortWithStatus(http.StatusInternalServerError)
+			c.logger.Printf("unexpected error occurred while validating invite: %v", err)
+			return
+		}
+	}
+
+	maxAge := int64(sess.Expires.Sub(time.Now().UTC()).Seconds())
+	cookie := fmt.Sprintf("mulhall.sessionID=%s; Max-Age=%d", sess.ID, maxAge)
+	ctx.Header(http.CanonicalHeaderKey("set-cookie"), cookie)
+	ctx.Status(http.StatusOK)
 }

@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/mhs294/mulhall/internals/services"
 	"github.com/mhs294/mulhall/internals/types"
+	"github.com/mhs294/mulhall/internals/utils"
 )
 
 // InviteController is responsible for handling requests for Invite HTTP APIs.
@@ -28,45 +29,30 @@ func NewInviteController(l *log.Logger, s *services.InviteService) *InviteContro
 func (c *InviteController) RegisterHandlers(e *gin.Engine) {
 	inv := e.Group("/invite")
 	{
-		inv.POST("/validate", c.validateInvite)
-		inv.POST("/accept", c.acceptInvite)
+		inv.POST("/create", c.create)
+		inv.POST("/accept", c.accept)
 	}
 }
 
-func (c *InviteController) validateInvite(ctx *gin.Context) {
-	email := ctx.Query("email")
-	if len(email) == 0 {
-		c.logger.Printf("attempted to validate an invite with no email")
+func (c *InviteController) create(ctx *gin.Context) {
+	var req *types.CreateInviteRequest
+	if err := utils.FromRequestJSON(&req, ctx); err != nil {
 		ctx.AbortWithStatus(http.StatusBadRequest)
+		c.logger.Printf("failed to unmarhsal CreateInviteRequest from json: %v", err)
 		return
 	}
 
-	token := ctx.Query("token")
-	if len(token) == 0 {
-		c.logger.Printf("attempted to validate an invite with no token")
-		ctx.AbortWithStatus(http.StatusBadRequest)
-		return
-	}
-
-	id, err := c.inviteService.ValidateInvite(email, token)
+	_, err := c.inviteService.CreateInvite(req)
 	if err != nil {
-		switch err.(type) {
-		case *types.InviteNotFoundError:
-			ctx.AbortWithStatus(http.StatusNotFound)
-			return
-		case *types.InviteExpiredError:
-			ctx.AbortWithStatus(http.StatusGone)
-			return
-		default:
-			ctx.AbortWithStatus(http.StatusInternalServerError)
-			return
-		}
+		ctx.AbortWithStatus(http.StatusInternalServerError)
+		c.logger.Printf("failed to create invite: %v", err)
+		return
 	}
 
-	ctx.String(http.StatusOK, string(id))
+	ctx.Status(http.StatusOK)
 }
 
-func (c *InviteController) acceptInvite(ctx *gin.Context) {
+func (c *InviteController) accept(ctx *gin.Context) {
 	email := ctx.Query("email")
 	if len(email) == 0 {
 		c.logger.Printf("attempted to validate an invite with no email")
@@ -81,7 +67,7 @@ func (c *InviteController) acceptInvite(ctx *gin.Context) {
 		return
 	}
 
-	if err := c.inviteService.AcceptInvite(email, token); err != nil {
+	if _, err := c.inviteService.ValidateInvite(email, token); err != nil {
 		switch err.(type) {
 		case *types.InviteNotFoundError:
 			ctx.AbortWithStatus(http.StatusNotFound)
@@ -89,8 +75,12 @@ func (c *InviteController) acceptInvite(ctx *gin.Context) {
 		case *types.InviteExpiredError:
 			ctx.AbortWithStatus(http.StatusGone)
 			return
+		case *types.InviteAlreadyAcceptedError:
+			ctx.AbortWithStatus(http.StatusConflict)
+			return
 		default:
 			ctx.AbortWithStatus(http.StatusInternalServerError)
+			c.logger.Printf("unexpected error occurred while validating invite: %v", err)
 			return
 		}
 	}
