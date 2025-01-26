@@ -24,6 +24,7 @@ func NewViewController(tr *repos.TeamRepository) *ViewController {
 // RegisterHandlers defines this controller's HTTP routes and their corresponding handler functions.
 func (c *ViewController) RegisterHandlers(e *gin.Engine) {
 	e.GET("/", c.index)
+	e.GET("/login", c.login)
 }
 
 func (c *ViewController) index(ctx *gin.Context) {
@@ -37,6 +38,10 @@ func (c *ViewController) index(ctx *gin.Context) {
 		return
 	}
 	render(ctx, http.StatusOK, views.Index(teams))
+}
+
+func (c *ViewController) login(ctx *gin.Context) {
+	// TODO - render login view
 }
 
 func render(ctx *gin.Context, status int, template templ.Component) error {
