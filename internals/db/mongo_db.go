@@ -134,7 +134,7 @@ func (mdb *MongoDB) GetOne(dbName string, collName string, query bson.D, result 
 	}
 
 	// Deserialize the returned document into the result
-	if err = qRes.Decode(&result); err != nil {
+	if err = qRes.Decode(result); err != nil {
 		return fmt.Errorf("failed to parse the query result: %v", err)
 	}
 

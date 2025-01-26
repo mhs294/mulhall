@@ -38,7 +38,7 @@ func (c *UserController) RegisterHandlers(e *gin.Engine) {
 
 func (c *UserController) register(ctx *gin.Context) {
 	var req *types.RegisterUserRequest
-	if err := utils.FromRequestJSON(&req, ctx); err != nil {
+	if err := utils.ParseRequestJSON(&req, ctx); err != nil {
 		ctx.AbortWithStatus(http.StatusBadRequest)
 		c.logger.Printf("failed to unmarhsal RegisterUserRequest from json: %v", err)
 		return
@@ -49,12 +49,12 @@ func (c *UserController) register(ctx *gin.Context) {
 		return
 	}
 
-	ctx.Status(http.StatusOK)
+	ctx.Status(http.StatusCreated)
 }
 
 func (c *UserController) login(ctx *gin.Context) {
 	var req *types.LoginRequest
-	if err := utils.FromRequestJSON(&req, ctx); err != nil {
+	if err := utils.ParseRequestJSON(&req, ctx); err != nil {
 		ctx.AbortWithStatus(http.StatusBadRequest)
 		c.logger.Printf("failed to unmarhsal LoginRequest from json: %v", err)
 		return
@@ -64,6 +64,8 @@ func (c *UserController) login(ctx *gin.Context) {
 	if err != nil {
 		switch err.(type) {
 		case *types.UserNotFoundError:
+			ctx.AbortWithStatus(http.StatusNotFound)
+			return
 		case *types.PasswordIncorrectError:
 			ctx.AbortWithStatus(http.StatusUnauthorized)
 			return
@@ -75,7 +77,7 @@ func (c *UserController) login(ctx *gin.Context) {
 	}
 
 	maxAge := int64(sess.Expiration.Sub(time.Now().UTC()).Seconds())
-	cookie := fmt.Sprintf("mulhall.sessionID=%s; Max-Age=%d", sess.ID, maxAge)
+	cookie := fmt.Sprintf("mulhall.sessionID=%s; Max-Age=%d; HttpOnly", sess.ID, maxAge)
 	ctx.Header(http.CanonicalHeaderKey("set-cookie"), cookie)
 	ctx.Status(http.StatusOK)
 }

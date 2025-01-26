@@ -30,8 +30,9 @@ func UserController() *controllers.UserController {
 
 func ViewController() *controllers.ViewController {
 	if viewCont == nil {
+		userAuth := UserAuthMiddleware()
 		teamRepo := TeamRepository()
-		viewCont = controllers.NewViewController(teamRepo)
+		viewCont = controllers.NewViewController(userAuth, teamRepo)
 	}
 
 	return viewCont

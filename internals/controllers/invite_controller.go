@@ -30,13 +30,13 @@ func (c *InviteController) RegisterHandlers(e *gin.Engine) {
 	inv := e.Group("/invite")
 	{
 		inv.POST("/create", c.create)
-		inv.POST("/accept", c.accept)
+		inv.GET("/accept", c.accept)
 	}
 }
 
 func (c *InviteController) create(ctx *gin.Context) {
 	var req *types.CreateInviteRequest
-	if err := utils.FromRequestJSON(&req, ctx); err != nil {
+	if err := utils.ParseRequestJSON(&req, ctx); err != nil {
 		ctx.AbortWithStatus(http.StatusBadRequest)
 		c.logger.Printf("failed to unmarhsal CreateInviteRequest from json: %v", err)
 		return
@@ -49,7 +49,7 @@ func (c *InviteController) create(ctx *gin.Context) {
 		return
 	}
 
-	ctx.Status(http.StatusOK)
+	ctx.Status(http.StatusCreated)
 }
 
 func (c *InviteController) accept(ctx *gin.Context) {
@@ -85,5 +85,5 @@ func (c *InviteController) accept(ctx *gin.Context) {
 		}
 	}
 
-	ctx.Status(http.StatusNoContent)
+	ctx.Status(http.StatusOK)
 }

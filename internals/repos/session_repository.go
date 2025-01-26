@@ -42,13 +42,10 @@ func (r *SessionRepository) InsertSession(s *types.Session) error {
 //
 // id is the unique identifier of the Session to look up.
 func (r *SessionRepository) GetSession(id types.SessionID) (*types.Session, error) {
-	var sess *types.Session
+	var sess types.Session
 	if err := r.mdb.GetOne(r.dbName, r.collName, bson.D{{Key: "id", Value: id}}, &sess); err != nil {
 		return nil, fmt.Errorf("failed to look up session: %v", err)
 	}
-	if sess == nil {
-		return nil, &types.SessionNotFoundError{ID: id}
-	}
 
-	return sess, nil
+	return &sess, nil
 }

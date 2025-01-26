@@ -79,19 +79,19 @@ func (s *UserService) Login(email string, pwd string) (*types.Session, error) {
 		return nil, fmt.Errorf("failed to login user: %v", err)
 	}
 
-	// Compare the submitted password hash against the User's password hash
-	hash, err := hashPassword(pwd, u.Salt)
-	if err != nil {
-		return nil, fmt.Errorf("failed to login user: %v", err)
-	}
-	if hash != u.Hash {
+	// Compare the submitted password against the User's password
+	saltedPwd := []byte(pwd + u.Salt)
+	err = bcrypt.CompareHashAndPassword([]byte(u.Hash), saltedPwd)
+	if err == bcrypt.ErrMismatchedHashAndPassword {
 		return nil, &types.PasswordIncorrectError{}
+	} else if err != nil {
+		return nil, fmt.Errorf("failed to login user: %v", err)
 	}
 
 	// Authentication successful, create new Session for the User
 	sess := &types.Session{
 		ID:         types.SessionID(uuid.New().String()),
-		UserID:     u.ID,
+		User:       u.ID,
 		Expiration: time.Now().UTC().Add(env.SessionExpiration),
 	}
 	if err = s.sessRepo.InsertSession(sess); err != nil {

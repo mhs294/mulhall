@@ -34,7 +34,7 @@ func (s *InviteService) CreateInvite(req *types.CreateInviteRequest) (*types.Inv
 		Email:        req.Email,
 		Contestant:   req.Contestant,
 		Role:         req.Role,
-		InvitingUser: req.InvtingUser,
+		InvitingUser: req.InvitingUser,
 		Token:        token,
 		Expiration:   time.Now().UTC().Add(env.InviteExpiration),
 		Accepted:     false,

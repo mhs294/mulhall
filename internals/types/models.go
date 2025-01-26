@@ -54,6 +54,6 @@ type Invite struct {
 // Session represents an authentication session for a logged in user.
 type Session struct {
 	ID         SessionID
-	UserID     UserID
+	User       UserID
 	Expiration time.Time
 }

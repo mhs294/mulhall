@@ -8,8 +8,9 @@ var userAuthMiddleWare *middleware.UserAuthMiddleware
 
 func UserAuthMiddleware() *middleware.UserAuthMiddleware {
 	if userAuthMiddleWare == nil {
+		logger := Logger()
 		sessRepo := SessionRepository()
-		userAuthMiddleWare = middleware.NewUserAuthMiddleware(sessRepo)
+		userAuthMiddleWare = middleware.NewUserAuthMiddleware(logger, sessRepo)
 	}
 
 	return userAuthMiddleWare
