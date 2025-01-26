@@ -1,0 +1,27 @@
+{
+	"nodes":[
+		{"id":"879f36be90c8774e","type":"text","text":"## User makes API/View Request","x":-1780,"y":-960,"width":325,"height":90,"color":"5"},
+		{"id":"ccca8cb1760ed472","x":-1340,"y":-955,"width":260,"height":80,"type":"text","text":"Does Session-ID header exist?"},
+		{"id":"a713dfbc66cee026","x":-1335,"y":-760,"width":250,"height":100,"type":"text","text":"Does Session exist for identifier in Session-ID header?"},
+		{"id":"4e119205e1ab92d0","x":-940,"y":-742,"width":263,"height":65,"color":"1","type":"text","text":"## Unauthorized"},
+		{"id":"a8b3a808567d741a","x":-1335,"y":-540,"width":250,"height":78,"type":"text","text":"Is the Session active or expired?"},
+		{"id":"a8ebb74d94d82e7b","x":-1335,"y":-351,"width":250,"height":91,"color":"4","type":"text","text":"## User Authenticated"},
+		{"id":"04d16f8d9a7951cf","x":-1000,"y":-355,"width":250,"height":100,"type":"text","text":"Proceed with subsequent middleware/request handling"},
+		{"id":"a56ddf14a6227f05","x":-580,"y":-754,"width":250,"height":89,"type":"text","text":"Is the request for loading a View or an internal API call?"},
+		{"id":"00a6ec0ae007639c","x":-300,"y":-925,"width":250,"height":100,"type":"text","text":"Abort request handling and redirect to Login page with **302 Found**"},
+		{"id":"5cd48339c1c1c1b1","x":-300,"y":-601,"width":250,"height":100,"type":"text","text":"Abort request handling and return **401 Unauthorized** to caller"}
+	],
+	"edges":[
+		{"id":"a1e34cc848aa0ed9","fromNode":"879f36be90c8774e","fromSide":"right","toNode":"ccca8cb1760ed472","toSide":"left"},
+		{"id":"26c60f77bfc7b78b","fromNode":"ccca8cb1760ed472","fromSide":"right","toNode":"4e119205e1ab92d0","toSide":"top","label":"No"},
+		{"id":"176c80c69faf211a","fromNode":"ccca8cb1760ed472","fromSide":"bottom","toNode":"a713dfbc66cee026","toSide":"top","label":"Yes"},
+		{"id":"0eeecd4245b02466","fromNode":"a713dfbc66cee026","fromSide":"right","toNode":"4e119205e1ab92d0","toSide":"left","label":"No"},
+		{"id":"d052781460d99afb","fromNode":"a713dfbc66cee026","fromSide":"bottom","toNode":"a8b3a808567d741a","toSide":"top","label":"Yes"},
+		{"id":"d8aa7770ac1cd67b","fromNode":"a8b3a808567d741a","fromSide":"right","toNode":"4e119205e1ab92d0","toSide":"bottom","label":"Expired"},
+		{"id":"531a7a519e380e70","fromNode":"a8b3a808567d741a","fromSide":"bottom","toNode":"a8ebb74d94d82e7b","toSide":"top","label":"Active"},
+		{"id":"6f78ccccda7cf353","fromNode":"a8ebb74d94d82e7b","fromSide":"right","toNode":"04d16f8d9a7951cf","toSide":"left"},
+		{"id":"52fb2b79c9723b94","fromNode":"4e119205e1ab92d0","fromSide":"right","toNode":"a56ddf14a6227f05","toSide":"left"},
+		{"id":"2460b7f89b4f0323","fromNode":"a56ddf14a6227f05","fromSide":"top","toNode":"00a6ec0ae007639c","toSide":"left","label":"View"},
+		{"id":"c24de6fc2cd7fde1","fromNode":"a56ddf14a6227f05","fromSide":"bottom","toNode":"5cd48339c1c1c1b1","toSide":"left","label":"API"}
+	]
+}

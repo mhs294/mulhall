@@ -17,6 +17,7 @@ import (
 type UserService struct {
 	invService *InviteService
 	userRepo   *repos.UserRepository
+	sessRepo   *repos.SessionRepository
 }
 
 // NewUserService creates a new instance of an UserService and returns a pointer to it.
@@ -24,10 +25,11 @@ type UserService struct {
 // s is the InviteService that will be used to manage Invitations during User creation workflows.
 //
 // r is the UserRepository that will be used at runtime by the UserService.
-func NewUserService(s *InviteService, r *repos.UserRepository) *UserService {
+func NewUserService(s *InviteService, ur *repos.UserRepository, sr *repos.SessionRepository) *UserService {
 	return &UserService{
 		invService: s,
-		userRepo:   r,
+		userRepo:   ur,
+		sessRepo:   sr,
 	}
 }
 
@@ -66,6 +68,7 @@ func (s *UserService) Register(req *types.RegisterUserRequest) (*types.User, err
 //
 // pwd is the raw password submitted by the User.
 func (s *UserService) Login(email string, pwd string) (*types.Session, error) {
+	// Look up the User
 	u, err := s.userRepo.GetUser(email)
 	if err != nil {
 		var notFound *types.UserNotFoundError
@@ -76,19 +79,23 @@ func (s *UserService) Login(email string, pwd string) (*types.Session, error) {
 		return nil, fmt.Errorf("failed to login user: %v", err)
 	}
 
+	// Compare the submitted password hash against the User's password hash
 	hash, err := hashPassword(pwd, u.Salt)
 	if err != nil {
 		return nil, fmt.Errorf("failed to login user: %v", err)
 	}
-
 	if hash != u.Hash {
 		return nil, &types.PasswordIncorrectError{}
 	}
 
-	// TODO - create session and return it
+	// Authentication successful, create new Session for the User
 	sess := &types.Session{
-		ID:      types.SessionID(uuid.New().String()),
-		Expires: time.Now().UTC().Add(env.SessionExpiration),
+		ID:         types.SessionID(uuid.New().String()),
+		UserID:     u.ID,
+		Expiration: time.Now().UTC().Add(env.SessionExpiration),
+	}
+	if err = s.sessRepo.InsertSession(sess); err != nil {
+		return nil, fmt.Errorf("failed to create new session for user: %v", err)
 	}
 
 	return sess, nil

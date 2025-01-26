@@ -32,7 +32,7 @@ func (r *UserRepository) TestConnection() error {
 // u is the User to insert into the database.
 func (r *UserRepository) InsertUser(u *types.User) error {
 	if err := r.mdb.InsertOne(r.dbName, r.collName, u); err != nil {
-		return fmt.Errorf("failed to insert invite: %v", err)
+		return fmt.Errorf("failed to insert user: %v", err)
 	}
 
 	return nil
@@ -40,17 +40,17 @@ func (r *UserRepository) InsertUser(u *types.User) error {
 
 // GetUser returns the User for the provided email address (or nil if no such User exists).
 //
-// email is the email address to look up the User for.
+// email is the email address of the User to look up.
 func (r *UserRepository) GetUser(email string) (*types.User, error) {
 	// Load User from the database
 	var users []types.User
 	if err := r.mdb.GetAll(r.dbName, r.collName, bson.D{{Key: "email", Value: email}}, &users); err != nil {
-		return nil, &types.UserNotFoundError{Email: email}
+		return nil, fmt.Errorf("failed to look up user: %v", err)
 	}
 
 	// Verify that only one User was loaded
 	if len(users) == 0 {
-		return nil, nil
+		return nil, &types.UserNotFoundError{Email: email}
 	} else if len(users) != 1 {
 		return nil, fmt.Errorf("multiple users exists for email=%s", email)
 	}

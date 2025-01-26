@@ -96,6 +96,51 @@ func (mdb *MongoDB) GetAll(dbName string, collName string, query bson.D, results
 	return nil
 }
 
+// GetOne loads the first document from the specified database and collection matching the specified query into the provided result object.
+//
+// dbName is the name of the database to query.
+//
+// collName is the name of the collection to query.
+//
+// query is the bson.D representing the query to load the desired document.
+//
+// result is the provided object into which the document returned from the query will be deserialized and stored.
+func (mdb *MongoDB) GetOne(dbName string, collName string, query bson.D, result any) error {
+	// Create a new client and connect to the server
+	ctx := context.Background()
+	ctx, cancel := context.WithTimeout(ctx, mdb.timeout)
+	defer cancel()
+	client, err := createClient(mdb.connStr, ctx)
+	if err != nil {
+		return fmt.Errorf("failed to connect to the database: %v", err)
+	}
+
+	// Setup deferred connection closure for when function completes
+	defer func() {
+		if err = client.Disconnect(ctx); err != nil {
+			log.Printf("%v", err)
+		}
+	}()
+
+	// Load the document from the database collection using the specified query filters
+	coll := client.Database(dbName).Collection(collName)
+	qRes := coll.FindOne(ctx, query)
+	if err = qRes.Err(); err == mongo.ErrNoDocuments {
+		// Couldn't find any document for the query, defer to caller
+		return nil
+	} else if err != nil {
+		// An unexpected error occurred, return it to the caller
+		return fmt.Errorf("failed to query %s.%s: %v", dbName, collName, err)
+	}
+
+	// Deserialize the returned document into the result
+	if err = qRes.Decode(&result); err != nil {
+		return fmt.Errorf("failed to parse the query result: %v", err)
+	}
+
+	return nil
+}
+
 // InsertOne inserts the provided object as a document into the specified database collection.
 //
 // dbName is the name of the database where the document will be inserted.

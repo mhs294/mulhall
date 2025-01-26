@@ -11,31 +11,38 @@
             "id": "4937c99ab87c2faf",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "canvas",
               "state": {
-                "file": "Data Models/User.md",
-                "mode": "source",
-                "source": false
+                "file": "Logic Flows/Event Flows.canvas",
+                "viewState": {
+                  "x": -340,
+                  "y": -380,
+                  "zoom": 0
+                }
               },
-              "icon": "lucide-file",
-              "title": "User"
+              "icon": "lucide-layout-dashboard",
+              "title": "Event Flows"
             }
           },
           {
-            "id": "18975a4954943f6a",
+            "id": "4a1ea4d370227d2c",
             "type": "leaf",
             "state": {
-              "type": "markdown",
+              "type": "canvas",
               "state": {
-                "file": "Data Models/Contestant.md",
-                "mode": "source",
-                "source": false
+                "file": "Logic Flows/Auth Middleware Flow.canvas",
+                "viewState": {
+                  "x": -937.5,
+                  "y": -475,
+                  "zoom": 0
+                }
               },
-              "icon": "lucide-file",
-              "title": "Contestant"
+              "icon": "lucide-layout-dashboard",
+              "title": "Auth Middleware Flow"
             }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -176,29 +183,31 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "4937c99ab87c2faf",
+  "active": "4a1ea4d370227d2c",
   "lastOpenFiles": [
-    "Data Models/Team.md",
-    "Data Models/Schedule.md",
+    "Logic Flows/Event Flows.canvas",
+    "Logic Flows/Auth Middleware Flow.canvas",
     "Data Models/User.md",
+    "Data Models/Session.md",
+    "Logic Flows/Invitation Flow.canvas",
+    "Logic Flows/Auth Middleware Flow.md",
     "Data Models/Invite.md",
     "Data Models/Contestant.md",
+    "Data Models/Team.md",
+    "Data Models/Schedule.md",
     "Data Models/Entry.md",
     "Brainstorming/Contestant Statuses.canvas",
     "Brainstorming/Roles + Functions.canvas",
     "Roles.md",
-    "Events/Event Flows.canvas",
     "Untitled 1.canvas",
     "2024-12-01.md",
     "Untitled.canvas",
-    "Events/Invitation Flow.canvas",
     "Views/Invite User Form.canvas",
     "invite-user-mockup.png",
     "Views/My Picks by Week.canvas",
     "Views/Weekly Picks.canvas",
     "Views/img/weekly-picks-mockup.png",
     "Views/img/my-picks-by-week-mockup.png",
-    "Rules/Determining Winner(s).canvas",
     "Events/Invitation Flow.md",
     "Data Models/AuditEvent.md",
     "Brainstorming/Roles + Functions.md",
@@ -208,7 +217,7 @@
     "Views",
     "Rules",
     "Events/Event Flow.md",
-    "Events",
+    "Logic Flows",
     "u9fltoslqdsyao8cpm0k.webp",
     "ayvwcmluj2ohkdlbiegi.webp",
     "Welcome.md",

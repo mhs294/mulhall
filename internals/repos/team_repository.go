@@ -51,6 +51,8 @@ func (r *TeamRepository) GetAllTeams() ([]types.Team, error) {
 }
 
 // GetTeam returns the Team keyed by the specified ID (or an empty Team if no such Team exists).
+//
+// id is the unique identifier of the Team to look up.
 func (r *TeamRepository) GetTeam(id types.TeamID) (types.Team, error) {
 	if r.teams == nil {
 		err := r.loadTeams()

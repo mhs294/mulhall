@@ -69,12 +69,12 @@ func (c *UserController) login(ctx *gin.Context) {
 			return
 		default:
 			ctx.AbortWithStatus(http.StatusInternalServerError)
-			c.logger.Printf("unexpected error occurred while validating invite: %v", err)
+			c.logger.Printf("unexpected error occurred while attempting to login: %v", err)
 			return
 		}
 	}
 
-	maxAge := int64(sess.Expires.Sub(time.Now().UTC()).Seconds())
+	maxAge := int64(sess.Expiration.Sub(time.Now().UTC()).Seconds())
 	cookie := fmt.Sprintf("mulhall.sessionID=%s; Max-Age=%d", sess.ID, maxAge)
 	ctx.Header(http.CanonicalHeaderKey("set-cookie"), cookie)
 	ctx.Status(http.StatusOK)

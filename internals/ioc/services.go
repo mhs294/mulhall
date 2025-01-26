@@ -19,8 +19,9 @@ func InviteService() *services.InviteService {
 func UserService() *services.UserService {
 	if userService == nil {
 		invServ := InviteService()
-		repo := UserRepository()
-		userService = services.NewUserService(invServ, repo)
+		userRepo := UserRepository()
+		sessRepo := SessionRepository()
+		userService = services.NewUserService(invServ, userRepo, sessRepo)
 	}
 
 	return userService

@@ -40,7 +40,7 @@ func (r *InviteRepository) InsertInvite(inv *types.Invite) error {
 
 // GetInvite returns the Invite for the provided email address and token (or nil if no such Invite exists).
 //
-// email is the email address to look up the Invite for.
+// email is the email address of the Invite to look up.
 //
 // token is the token string that should match with the email on the Invite.
 func (r *InviteRepository) GetInvite(email string, token string) (*types.Invite, error) {
