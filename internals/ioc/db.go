@@ -9,7 +9,8 @@ var mongoDB *db.MongoDB
 
 func MongoDB() *db.MongoDB {
 	if mongoDB == nil {
-		mongoDB = db.NewMongoDB(env.MongoDBConnStr, env.Timeout)
+		logger = Logger()
+		mongoDB = db.NewMongoDB(env.MongoDBConnStr, env.Timeout, logger)
 	}
 
 	return mongoDB

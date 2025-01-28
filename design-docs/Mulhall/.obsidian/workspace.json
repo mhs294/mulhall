@@ -28,17 +28,14 @@
             "id": "4a1ea4d370227d2c",
             "type": "leaf",
             "state": {
-              "type": "canvas",
+              "type": "markdown",
               "state": {
-                "file": "Logic Flows/Auth Middleware Flow.canvas",
-                "viewState": {
-                  "x": -937.5,
-                  "y": -475,
-                  "zoom": 0
-                }
+                "file": "Data Models/Contestant.md",
+                "mode": "source",
+                "source": false
               },
-              "icon": "lucide-layout-dashboard",
-              "title": "Auth Middleware Flow"
+              "icon": "lucide-file",
+              "title": "Contestant"
             }
           }
         ],
@@ -185,8 +182,8 @@
   },
   "active": "4a1ea4d370227d2c",
   "lastOpenFiles": [
-    "Logic Flows/Event Flows.canvas",
     "Logic Flows/Auth Middleware Flow.canvas",
+    "Logic Flows/Event Flows.canvas",
     "Data Models/User.md",
     "Data Models/Session.md",
     "Logic Flows/Invitation Flow.canvas",

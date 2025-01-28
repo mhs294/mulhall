@@ -15,15 +15,20 @@ import (
 type MongoDB struct {
 	connStr string
 	timeout time.Duration
+	logger  *log.Logger
 }
 
-// NewMongoDB creates a new instance of a MongoDB and returns a pointer to it.
+// NewMongoDB creates a new instance of a MongoDB wrapper client and returns a pointer to it.
 //
-// connStr is the connection string for the MongoDB instance (e.g. - "mongodb+srv://{user}:{pass}@myinstance.mongodb.net/").
+// connStr is the connection string for the MongoDB instance
+// (e.g. - "mongodb+srv://{user}:{pass}@myinstance.mongodb.net/").
 //
-// timeout is the [time.Duration] specifying the timeout for any database operations performed with the MongoDB instance.
-func NewMongoDB(connStr string, timeout time.Duration) *MongoDB {
-	return &MongoDB{connStr: connStr, timeout: timeout}
+// timeout is the [time.Duration] specifying the timeout for any database operations performed with the
+// MongoDB instance.
+//
+// l is the pointer to the [log.Logger] that will be used at runtime by the MongoDB wrapper client.
+func NewMongoDB(connStr string, timeout time.Duration, l *log.Logger) *MongoDB {
+	return &MongoDB{connStr: connStr, timeout: timeout, logger: l}
 }
 
 // TestConnection tests the connection to the MongoDB instance and returns any error that occurs.
@@ -42,7 +47,7 @@ func (mdb *MongoDB) TestConnection(dbName string) error {
 	// Setup deferred connection closure for when function completes
 	defer func() {
 		if err = client.Disconnect(ctx); err != nil {
-			log.Printf("%v", err)
+			mdb.logger.Print(err)
 		}
 	}()
 
@@ -55,7 +60,8 @@ func (mdb *MongoDB) TestConnection(dbName string) error {
 	return nil
 }
 
-// GetAll loads all documents from the specified database and collection using the specified query into the provided results object.
+// GetAll loads all documents from the specified database and collection using the specified query into the
+// provided results object.
 //
 // dbName is the name of the database to query.
 //
@@ -77,7 +83,7 @@ func (mdb *MongoDB) GetAll(dbName string, collName string, query bson.D, results
 	// Setup deferred connection closure for when function completes
 	defer func() {
 		if err = client.Disconnect(ctx); err != nil {
-			log.Printf("%v", err)
+			mdb.logger.Print(err)
 		}
 	}()
 
@@ -96,7 +102,8 @@ func (mdb *MongoDB) GetAll(dbName string, collName string, query bson.D, results
 	return nil
 }
 
-// GetOne loads the first document from the specified database and collection matching the specified query into the provided result object.
+// GetOne loads the first document from the specified database and collection matching the specified query
+// into the provided result object.
 //
 // dbName is the name of the database to query.
 //
@@ -118,7 +125,7 @@ func (mdb *MongoDB) GetOne(dbName string, collName string, query bson.D, result 
 	// Setup deferred connection closure for when function completes
 	defer func() {
 		if err = client.Disconnect(ctx); err != nil {
-			log.Printf("%v", err)
+			mdb.logger.Print(err)
 		}
 	}()
 
@@ -147,8 +154,8 @@ func (mdb *MongoDB) GetOne(dbName string, collName string, query bson.D, result 
 //
 // collName is the name of the collection where the document will be inserted.
 //
-// doc is the object that will be serialized into a document and inserted into the database collection.
-func (mdb *MongoDB) InsertOne(dbName string, collName string, doc any) error {
+// insert is the object that represents the new document to be inserted.
+func (mdb *MongoDB) InsertOne(dbName string, collName string, insert any) error {
 	// Create a new client and connect to the server
 	ctx := context.Background()
 	ctx, cancel := context.WithTimeout(ctx, mdb.timeout)
@@ -161,7 +168,7 @@ func (mdb *MongoDB) InsertOne(dbName string, collName string, doc any) error {
 	// Setup deferred connection closure for when function completes
 	defer func() {
 		if err = client.Disconnect(ctx); err != nil {
-			log.Printf("%v", err)
+			mdb.logger.Print(err)
 		}
 	}()
 
@@ -169,7 +176,7 @@ func (mdb *MongoDB) InsertOne(dbName string, collName string, doc any) error {
 	coll := client.Database(dbName).Collection(collName)
 
 	// Convert the document into a BSON map
-	bsonData, err := bson.Marshal(doc)
+	bsonData, err := bson.Marshal(insert)
 	if err != nil {
 		return fmt.Errorf("failed to marhal document to bson: %v", err)
 	}
@@ -181,13 +188,14 @@ func (mdb *MongoDB) InsertOne(dbName string, collName string, doc any) error {
 
 	// Insert the BSON map into the database collection
 	if _, err := coll.InsertOne(ctx, bsonMap); err != nil {
-		log.Fatal(err)
+		mdb.logger.Print(err)
 	}
 
 	return nil
 }
 
-// UpdateOne updates a single document in the specified database collection using the provided filter and update queries.
+// UpdateOne updates a single document in the specified database collection using the provided filter
+// and update queries.
 //
 // dbName is the name of the database containing the document to update.
 //
@@ -209,7 +217,7 @@ func (mdb *MongoDB) UpdateOne(dbName string, collName string, filter bson.M, upd
 	// Setup deferred connection closure for when function completes
 	defer func() {
 		if err = client.Disconnect(ctx); err != nil {
-			log.Printf("%v", err)
+			mdb.logger.Print(err)
 		}
 	}()
 
@@ -219,6 +227,55 @@ func (mdb *MongoDB) UpdateOne(dbName string, collName string, filter bson.M, upd
 	// Perform the update
 	if _, err := coll.UpdateOne(ctx, filter, update); err != nil {
 		return fmt.Errorf("failed to update document (filter=%v, update=%v): %v", filter, update, err)
+	}
+
+	return nil
+}
+
+// ReplaceOne replaces a single document in the specified database collection corresponding to the
+// provided filter with an updated version of that document.
+//
+// dbName is the name of the database containing the document to replace.
+//
+// collName is the name of the collection containing the document to replace.
+//
+// filter is the bson.M representing the query to find the document to replace.
+//
+// replace is the object representing the new version of the document to replace the old version.
+func (mdb *MongoDB) ReplaceOne(dbName string, collName string, filter bson.M, replace any) error {
+	// Create a new client and connect to the server
+	ctx := context.Background()
+	ctx, cancel := context.WithTimeout(ctx, mdb.timeout)
+	defer cancel()
+	client, err := createClient(mdb.connStr, ctx)
+	if err != nil {
+		return fmt.Errorf("failed to connect to the database: %v", err)
+	}
+
+	// Setup deferred connection closure for when function completes
+	defer func() {
+		if err = client.Disconnect(ctx); err != nil {
+			mdb.logger.Print(err)
+		}
+	}()
+
+	// Acquire reference to the database collection
+	coll := client.Database(dbName).Collection(collName)
+
+	// Convert the document into a BSON map
+	bsonData, err := bson.Marshal(c)
+	if err != nil {
+		return fmt.Errorf("failed to marhal document to bson: %v", err)
+	}
+	var bsonMap bson.M
+	err = bson.Unmarshal(bsonData, &bsonMap)
+	if err != nil {
+		return fmt.Errorf("failed to unmarshal document to bson.M: %v", err)
+	}
+
+	// Perform the replace
+	if _, err := coll.UpdateOne(ctx, filter, replace); err != nil {
+		return fmt.Errorf("failed to replace document (filter=%v, replace=%v): %v", filter, replace, err)
 	}
 
 	return nil

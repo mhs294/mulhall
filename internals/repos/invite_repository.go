@@ -64,7 +64,7 @@ func (r *InviteRepository) GetInvite(email string, token string) (*types.Invite,
 //
 // id is the unique identifier of the Invite being accepted.
 func (r *InviteRepository) AcceptInvite(id types.InviteID) error {
-	// Define the update operation and filter
+	// Define the filter query and update operation
 	filter := bson.M{"id": id}
 	update := bson.M{
 		"$set": bson.M{

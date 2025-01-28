@@ -64,8 +64,6 @@ func (c *UserController) login(ctx *gin.Context) {
 	if err != nil {
 		switch err.(type) {
 		case *types.UserNotFoundError:
-			ctx.AbortWithStatus(http.StatusNotFound)
-			return
 		case *types.PasswordIncorrectError:
 			ctx.AbortWithStatus(http.StatusUnauthorized)
 			return
