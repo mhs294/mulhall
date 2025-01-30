@@ -263,7 +263,7 @@ func (mdb *MongoDB) ReplaceOne(dbName string, collName string, filter bson.M, re
 	coll := client.Database(dbName).Collection(collName)
 
 	// Convert the document into a BSON map
-	bsonData, err := bson.Marshal(c)
+	bsonData, err := bson.Marshal(replace)
 	if err != nil {
 		return fmt.Errorf("failed to marhal document to bson: %v", err)
 	}

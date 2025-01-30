@@ -8,6 +8,7 @@ var teamRepo *repos.TeamRepository
 var inviteRepo *repos.InviteRepository
 var userRepo *repos.UserRepository
 var sessionRepo *repos.SessionRepository
+var contestantRepo *repos.ContestantRepository
 
 func TeamRepository() *repos.TeamRepository {
 	if teamRepo == nil {
@@ -55,4 +56,16 @@ func SessionRepository() *repos.SessionRepository {
 	}
 
 	return sessionRepo
+}
+
+func ContestantRepository() *repos.ContestantRepository {
+	if contestantRepo == nil {
+		mdb := MongoDB()
+		contestantRepo = repos.NewContestantRepository(mdb)
+		if err := contestantRepo.TestConnection(); err != nil {
+			panic(err)
+		}
+	}
+
+	return contestantRepo
 }
