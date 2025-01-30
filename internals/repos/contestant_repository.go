@@ -42,12 +42,12 @@ func (r *ContestantRepository) InsertContestant(c *types.Contestant) error {
 //
 // id is the unique identifier of the Contestant to look up.
 func (r *ContestantRepository) GetContestant(id types.ContestantID) (*types.Contestant, error) {
-	var sess types.Contestant
-	if err := r.mdb.GetOne(r.dbName, r.collName, bson.D{{Key: "id", Value: id}}, &sess); err != nil {
+	var c types.Contestant
+	if err := r.mdb.GetOne(r.dbName, r.collName, bson.D{{Key: "id", Value: id}}, &c); err != nil {
 		return nil, fmt.Errorf("failed to look up contestant: %v", err)
 	}
 
-	return &sess, nil
+	return &c, nil
 }
 
 // UpdateContestant updates a Contestant in the database using the information in the provided model.
