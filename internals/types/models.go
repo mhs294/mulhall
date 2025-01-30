@@ -25,18 +25,20 @@ type User struct {
 	Active        bool   `json:"active"`
 }
 
-// Contestant defines a single entry within the pool and the AuthorizedUsers who maintain it.
+// Contestant defines a single entry within the pool and the authorized Users who maintain it.
 type Contestant struct {
-	ID              ContestantID     `json:"id"`
-	Name            string           `json:"name"`
-	AuthorizedUsers []AuthorizedUser `json:"authorizedUsers"`
-	Status          status.Status    `json:"status"`
+	ID              ContestantID          `json:"id"`
+	Name            string                `json:"name"`
+	AuthorizedUsers map[UserID]roles.Role `json:"authorizedUsers"`
+	Status          status.Status         `json:"status"`
+	Active          bool                  `json:"active"`
 }
 
-// AuthorizedUser is a composite of a User's ID and their corresponding Role for the associated Contestant.
-type AuthorizedUser struct {
-	ID   UserID     `json:"id"`
-	Role roles.Role `json:"role"`
+// Pool defines a set of rules for an elimination game in which a group of Contestants compete.
+type Pool struct {
+	ID          PoolID         `json:"id"`
+	Contestants []ContestantID `json:"contestants"`
+	Active      bool           `json:"active"`
 }
 
 // Invite represents an invitation for a new user to create an account with the site and join a Contestant.

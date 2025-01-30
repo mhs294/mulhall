@@ -33,7 +33,7 @@ func (c *ViewController) index(ctx *gin.Context) {
 	_, cancel := context.WithTimeout(context.Background(), env.Timeout)
 	defer cancel()
 
-	teams, err := c.teamRepo.GetAllTeams()
+	teams, err := c.teamRepo.GetAll()
 	if err != nil {
 		// TODO - replace with error view
 		ctx.AbortWithStatus(http.StatusInternalServerError)

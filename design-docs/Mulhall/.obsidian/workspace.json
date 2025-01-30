@@ -30,12 +30,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Data Models/Contestant.md",
+                "file": "Data Models/Pool.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Contestant"
+              "title": "Pool"
             }
           }
         ],
@@ -182,16 +182,17 @@
   },
   "active": "4a1ea4d370227d2c",
   "lastOpenFiles": [
+    "Data Models/Contestant.md",
+    "Data Models/Pool.md",
+    "Data Models/Schedule.md",
+    "Data Models/User.md",
     "Logic Flows/Auth Middleware Flow.canvas",
     "Logic Flows/Event Flows.canvas",
-    "Data Models/User.md",
     "Data Models/Session.md",
     "Logic Flows/Invitation Flow.canvas",
     "Logic Flows/Auth Middleware Flow.md",
     "Data Models/Invite.md",
-    "Data Models/Contestant.md",
     "Data Models/Team.md",
-    "Data Models/Schedule.md",
     "Data Models/Entry.md",
     "Brainstorming/Contestant Statuses.canvas",
     "Brainstorming/Roles + Functions.canvas",

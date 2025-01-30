@@ -3,7 +3,6 @@ package middleware
 import (
 	"log"
 	"net/http"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/mhs294/mulhall/internals/repos"
@@ -28,14 +27,16 @@ func NewUserAuthMiddleware(l *log.Logger, r *repos.SessionRepository) *UserAuthM
 // ViewAuth handles the validation of user authentication for View (webpage) requests,
 // which will involve redirection to a Login page if unsuccessful.
 func (m *UserAuthMiddleware) ViewAuth(ctx *gin.Context) {
-	if err := m.userAuth(ctx); err != nil {
+	sess, err := m.userAuth(ctx)
+	if err != nil {
 		// User is unauthorized, redirect to Login view
 		ctx.Header("Location", "/login")
 		ctx.AbortWithStatus(http.StatusFound)
 		return
 	}
 
-	// Continue with subsequent middleware/request handling
+	// Add the User's Session to the request context, continue with subsequent middleware/request handling
+	ctx.Set("session", sess)
 	ctx.Next()
 }
 
@@ -43,17 +44,19 @@ func (m *UserAuthMiddleware) ViewAuth(ctx *gin.Context) {
 // which should defer to the calling process to determine how any authentication
 // failures should be handled.
 func (m *UserAuthMiddleware) APIAuth(ctx *gin.Context) {
-	if err := m.userAuth(ctx); err != nil {
+	sess, err := m.userAuth(ctx)
+	if err != nil {
 		// User is unauthorized, return status to caller
 		ctx.AbortWithStatus(http.StatusUnauthorized)
 		return
 	}
 
-	// Continue with subsequent middleware/request handling
+	// Add the User's Session to the request context, continue with subsequent middleware/request handling
+	ctx.Set("session", sess)
 	ctx.Next()
 }
 
-func (m *UserAuthMiddleware) userAuth(ctx *gin.Context) error {
+func (m *UserAuthMiddleware) userAuth(ctx *gin.Context) (*types.Session, error) {
 	// Read the Session ID cookie
 	sessCookie, err := ctx.Cookie("mulhall.sessionID")
 
@@ -61,28 +64,21 @@ func (m *UserAuthMiddleware) userAuth(ctx *gin.Context) error {
 		// Couldn't read session cookie, assume user is unauthorized
 		ctx.AbortWithStatus(http.StatusUnauthorized)
 		m.logger.Printf("failed to read session cookie: %v", err)
-		return err
+		return nil, err
 	}
 
 	// Verify the Session ID is present
 	sessID := types.SessionID(sessCookie)
 	if len(sessID) == 0 {
-		return &types.MissingSessionIDError{}
+		return nil, &types.MissingSessionIDError{}
 	}
 
 	// Look up the Session corresponding to the provided ID
-	sess, err := m.sessRepo.GetSession(sessID)
+	sess, err := m.sessRepo.GetByID(sessID)
 	if err != nil {
 		m.logger.Printf("failed to load session from database: %v", err)
-		return err
-	} else if sess == nil {
-		return &types.SessionNotFoundError{}
+		return nil, err
 	}
 
-	// Verify the Session is active (i.e. - has not expired)
-	if sess.Expiration.Before(time.Now().UTC()) {
-		return &types.SessionExpiredError{}
-	}
-
-	return nil
+	return sess, nil
 }

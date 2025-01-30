@@ -36,11 +36,36 @@ func (e *InviteAlreadyAcceptedError) Error() string {
 
 // The system attempted to find a User that does not exist.
 type UserNotFoundError struct {
+	ID    UserID
 	Email string
 }
 
 func (e *UserNotFoundError) Error() string {
-	return fmt.Sprintf("failed to find user. email=%s", e.Email)
+	detail := ""
+	if len(e.ID) > 0 {
+		detail = fmt.Sprintf("id=%s", e.ID)
+	} else if len(e.Email) > 0 {
+		detail = fmt.Sprintf("email=%s", e.Email)
+	}
+
+	return fmt.Sprintf("failed to find user. %s", detail)
+}
+
+// The system attempted to load a User that is inactive.
+type UserInactiveError struct {
+	ID    UserID
+	Email string
+}
+
+func (e *UserInactiveError) Error() string {
+	detail := ""
+	if len(e.ID) > 0 {
+		detail = fmt.Sprintf("id=%s", e.ID)
+	} else if len(e.Email) > 0 {
+		detail = fmt.Sprintf("email=%s", e.Email)
+	}
+
+	return fmt.Sprintf("user is inactive. %s", detail)
 }
 
 // The system attempted to register a new User with a mismatched password/confirm.

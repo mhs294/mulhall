@@ -20,7 +20,7 @@ type UserService struct {
 	sessRepo   *repos.SessionRepository
 }
 
-// NewUserService creates a new instance of an UserService and returns a pointer to it.
+// NewUserService creates a new instance of a UserService and returns a pointer to it.
 //
 // s is the InviteService that will be used to manage Invitations during User creation workflows.
 //
@@ -69,7 +69,7 @@ func (s *UserService) Register(req *types.RegisterUserRequest) (*types.User, err
 // pwd is the raw password submitted by the User.
 func (s *UserService) Login(email string, pwd string) (*types.Session, error) {
 	// Look up the User
-	u, err := s.userRepo.GetUser(email)
+	u, err := s.userRepo.GetByEmail(email)
 	if err != nil {
 		var notFound *types.UserNotFoundError
 		if errors.As(err, &notFound) {
@@ -94,7 +94,7 @@ func (s *UserService) Login(email string, pwd string) (*types.Session, error) {
 		User:       u.ID,
 		Expiration: time.Now().UTC().Add(env.SessionExpiration),
 	}
-	if err = s.sessRepo.InsertSession(sess); err != nil {
+	if err = s.sessRepo.Insert(sess); err != nil {
 		return nil, fmt.Errorf("failed to create new session for user: %v", err)
 	}
 
@@ -118,7 +118,7 @@ func (s *UserService) createUser(req *types.RegisterUserRequest) (*types.User, e
 	}
 
 	// Insert the User into the database
-	if err := s.userRepo.InsertUser(u); err != nil {
+	if err := s.userRepo.Insert(u); err != nil {
 		return nil, fmt.Errorf("failed to create user: %v", err)
 	}
 

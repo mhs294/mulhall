@@ -30,8 +30,8 @@ func (r *TeamRepository) TestConnection() error {
 	return r.mdb.TestConnection(r.dbName)
 }
 
-// GetAllTeams returns a slice of all available Teams, sorted by their location shorthand.
-func (r *TeamRepository) GetAllTeams() ([]types.Team, error) {
+// GetAll returns a slice of all available Teams, sorted by their location shorthand.
+func (r *TeamRepository) GetAll() ([]types.Team, error) {
 	if r.teams == nil {
 		err := r.loadTeams()
 		if err != nil {
@@ -50,10 +50,10 @@ func (r *TeamRepository) GetAllTeams() ([]types.Team, error) {
 	return teams, nil
 }
 
-// GetTeam returns the Team keyed by the specified ID (or an empty Team if no such Team exists).
+// GetByID returns the Team keyed by the specified ID (or an empty Team if no such Team exists).
 //
 // id is the unique identifier of the Team to look up.
-func (r *TeamRepository) GetTeam(id types.TeamID) (types.Team, error) {
+func (r *TeamRepository) GetByID(id types.TeamID) (types.Team, error) {
 	if r.teams == nil {
 		err := r.loadTeams()
 		if err != nil {
@@ -66,7 +66,7 @@ func (r *TeamRepository) GetTeam(id types.TeamID) (types.Team, error) {
 
 func (r *TeamRepository) loadTeams() error {
 	var teams []types.Team
-	if err := r.mdb.GetAll(r.dbName, r.collName, bson.D{}, &teams); err != nil {
+	if err := r.mdb.GetAll(r.dbName, r.collName, bson.M{}, &teams); err != nil {
 		return fmt.Errorf("failed to load teams from database: %v", err)
 	}
 

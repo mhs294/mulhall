@@ -9,6 +9,9 @@ type UserID string
 // The unique identifier of a Contestant.
 type ContestantID string
 
+// The unique identifier of a Pool.
+type PoolID string
+
 // The unique identifier of an email Invite for a new User.
 type InviteID string
 

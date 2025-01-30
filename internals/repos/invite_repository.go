@@ -27,10 +27,10 @@ func (r *InviteRepository) TestConnection() error {
 	return r.mdb.TestConnection(r.dbName)
 }
 
-// InsertInvite inserts the provided Invite into the database.
+// Insert inserts the provided Invite into the database.
 //
 // inv is the Invite to insert into the database.
-func (r *InviteRepository) InsertInvite(inv *types.Invite) error {
+func (r *InviteRepository) Insert(inv *types.Invite) error {
 	if err := r.mdb.InsertOne(r.dbName, r.collName, inv); err != nil {
 		return fmt.Errorf("failed to insert invite: %v", err)
 	}
@@ -38,15 +38,18 @@ func (r *InviteRepository) InsertInvite(inv *types.Invite) error {
 	return nil
 }
 
-// GetInvite returns the Invite for the provided email address and token (or nil if no such Invite exists).
+// Get returns the Invite for the provided email address and token (or nil if no such Invite exists).
 //
 // email is the email address of the Invite to look up.
 //
 // token is the token string that should match with the email on the Invite.
-func (r *InviteRepository) GetInvite(email string, token string) (*types.Invite, error) {
+func (r *InviteRepository) Get(email string, token string) (*types.Invite, error) {
+	// Define the query
+	query := bson.M{"email": email}
+
 	// Load Invite from the database
 	var invs []types.Invite
-	if err := r.mdb.GetAll(r.dbName, r.collName, bson.D{{Key: "email", Value: email}}, &invs); err != nil {
+	if err := r.mdb.GetAll(r.dbName, r.collName, query, &invs); err != nil {
 		return nil, fmt.Errorf("failed to load invite")
 	}
 
@@ -60,10 +63,10 @@ func (r *InviteRepository) GetInvite(email string, token string) (*types.Invite,
 	return &invs[0], nil
 }
 
-// AcceptInvite updates the Accepted property of the Invite keyed by the provided ID to be true
+// Accept updates the Accepted property of the Invite keyed by the provided ID to be true
 //
 // id is the unique identifier of the Invite being accepted.
-func (r *InviteRepository) AcceptInvite(id types.InviteID) error {
+func (r *InviteRepository) Accept(id types.InviteID) error {
 	// Define the filter query and update operation
 	filter := bson.M{"id": id}
 	update := bson.M{

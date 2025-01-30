@@ -41,7 +41,7 @@ func (s *InviteService) CreateInvite(req *types.CreateInviteRequest) (*types.Inv
 	}
 
 	// Insert the Invite into the database
-	if err := s.invRepo.InsertInvite(inv); err != nil {
+	if err := s.invRepo.Insert(inv); err != nil {
 		return nil, fmt.Errorf("failed to create invite: %v", err)
 	}
 
@@ -59,7 +59,7 @@ func (s *InviteService) CreateInvite(req *types.CreateInviteRequest) (*types.Inv
 //
 // token is the token string that should match with the email on the Invite.
 func (s *InviteService) ValidateInvite(email string, token string) (types.InviteID, error) {
-	inv, err := s.invRepo.GetInvite(email, token)
+	inv, err := s.invRepo.Get(email, token)
 	if err != nil {
 		return "", err
 	}
@@ -83,5 +83,5 @@ func (s *InviteService) ValidateInvite(email string, token string) (types.Invite
 //
 // id is the unique identifier of the Invite being accepted.
 func (s *InviteService) AcceptInvite(id types.InviteID) error {
-	return s.invRepo.AcceptInvite(id)
+	return s.invRepo.Accept(id)
 }

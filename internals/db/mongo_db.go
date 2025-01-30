@@ -53,7 +53,7 @@ func (mdb *MongoDB) TestConnection(dbName string) error {
 
 	// Test the client connection
 	var result bson.M
-	if err := client.Database(dbName).RunCommand(ctx, bson.D{{Key: "ping", Value: 1}}).Decode(&result); err != nil {
+	if err := client.Database(dbName).RunCommand(ctx, bson.M{"ping": 1}).Decode(&result); err != nil {
 		return fmt.Errorf("database connection test failed: %v", err)
 	}
 
@@ -67,10 +67,10 @@ func (mdb *MongoDB) TestConnection(dbName string) error {
 //
 // collName is the name of the collection to query.
 //
-// query is the bson.D representing the query to load the desired documents.
+// query is the bson.M representing the query to load the desired documents.
 //
 // results is the provided object into which the documents returned from the query will be deserialized and stored.
-func (mdb *MongoDB) GetAll(dbName string, collName string, query bson.D, results any) error {
+func (mdb *MongoDB) GetAll(dbName string, collName string, query bson.M, results any) error {
 	// Create a new client and connect to the server
 	ctx := context.Background()
 	ctx, cancel := context.WithTimeout(ctx, mdb.timeout)
@@ -109,10 +109,10 @@ func (mdb *MongoDB) GetAll(dbName string, collName string, query bson.D, results
 //
 // collName is the name of the collection to query.
 //
-// query is the bson.D representing the query to load the desired document.
+// query is the bson.M representing the query to load the desired document.
 //
 // result is the provided object into which the document returned from the query will be deserialized and stored.
-func (mdb *MongoDB) GetOne(dbName string, collName string, query bson.D, result any) error {
+func (mdb *MongoDB) GetOne(dbName string, collName string, query bson.M, result any) error {
 	// Create a new client and connect to the server
 	ctx := context.Background()
 	ctx, cancel := context.WithTimeout(ctx, mdb.timeout)
