@@ -33,7 +33,7 @@ func (s *ContestantService) GetByPool(poolID types.PoolID) ([]types.Contestant, 
 		return nil, err
 	}
 
-	// Load Contestant from database using Contestant IDs from Pool
+	// Load Contestants from database using Contestant IDs from Pool
 	i := 0
 	conIDs := make([]types.ContestantID, len(p.Contestants))
 	for id := range p.Contestants {
