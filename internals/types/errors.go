@@ -34,7 +34,7 @@ func (e *InviteAlreadyAcceptedError) Error() string {
 	return fmt.Sprintf("invite has already been accepted. email=%s, token=%s", e.Email, e.Token)
 }
 
-// The system attempted to find a User that does not exist.
+// The system attempted to find a User that does not exist or has been deactivated.
 type UserNotFoundError struct {
 	ID    UserID
 	Email string
@@ -49,23 +49,6 @@ func (e *UserNotFoundError) Error() string {
 	}
 
 	return fmt.Sprintf("failed to find user. %s", detail)
-}
-
-// The system attempted to load a User that is inactive.
-type UserInactiveError struct {
-	ID    UserID
-	Email string
-}
-
-func (e *UserInactiveError) Error() string {
-	detail := ""
-	if len(e.ID) > 0 {
-		detail = fmt.Sprintf("id=%s", e.ID)
-	} else if len(e.Email) > 0 {
-		detail = fmt.Sprintf("email=%s", e.Email)
-	}
-
-	return fmt.Sprintf("user is inactive. %s", detail)
 }
 
 // The system attempted to register a new User with a mismatched password/confirm.
@@ -103,4 +86,13 @@ type SessionExpiredError struct{}
 
 func (e *SessionExpiredError) Error() string {
 	return "session is expired."
+}
+
+// The system attempted to find a Pool that does not exist or has been deactivated.
+type PoolNotFoundError struct {
+	ID PoolID
+}
+
+func (e *PoolNotFoundError) Error() string {
+	return fmt.Sprintf("failed to find pool. id=%s", e.ID)
 }

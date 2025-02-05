@@ -9,7 +9,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-// TeamRepository is a mechanism for loading Team information.
+// TeamRepository manages Team records in the database.
 // Since NFL teams rarely change, the Teams are loaded on initialization
 // and then cached for the lifetime of the application.
 type TeamRepository struct {

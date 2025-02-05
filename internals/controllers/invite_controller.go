@@ -42,7 +42,7 @@ func (c *InviteController) create(ctx *gin.Context) {
 		return
 	}
 
-	_, err := c.inviteService.CreateInvite(req)
+	_, err := c.inviteService.Create(req)
 	if err != nil {
 		ctx.AbortWithStatus(http.StatusInternalServerError)
 		c.logger.Printf("failed to create invite: %v", err)
@@ -67,7 +67,7 @@ func (c *InviteController) accept(ctx *gin.Context) {
 		return
 	}
 
-	if _, err := c.inviteService.ValidateInvite(email, token); err != nil {
+	if _, err := c.inviteService.Validate(email, token); err != nil {
 		switch err.(type) {
 		case *types.InviteNotFoundError:
 			ctx.AbortWithStatus(http.StatusNotFound)

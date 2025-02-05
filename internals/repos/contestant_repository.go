@@ -8,7 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-// ContestantRepository is a mechanism for managing Contestants participating in Pools on the site.
+// ContestantRepository manages Contestant records in the database.
 type ContestantRepository struct {
 	mdb      *db.MongoDB
 	dbName   string
@@ -27,10 +27,10 @@ func (r *ContestantRepository) TestConnection() error {
 	return r.mdb.TestConnection(r.dbName)
 }
 
-// InsertContestant inserts the provided Contestant into the database.
+// Insert inserts the provided Contestant into the database.
 //
 // c is the Contestant to insert into the database.
-func (r *ContestantRepository) InsertContestant(c *types.Contestant) error {
+func (r *ContestantRepository) Insert(c *types.Contestant) error {
 	if err := r.mdb.InsertOne(r.dbName, r.collName, c); err != nil {
 		return fmt.Errorf("failed to insert contestant: %v", err)
 	}
@@ -49,12 +49,12 @@ func (r *ContestantRepository) GetByIDs(ids []types.ContestantID) ([]types.Conte
 	}
 
 	// Load the Contestants from the database
-	var conts []types.Contestant
-	if err := r.mdb.GetAll(r.dbName, r.collName, query, &conts); err != nil {
+	var cons []types.Contestant
+	if err := r.mdb.GetAll(r.dbName, r.collName, query, &cons); err != nil {
 		return nil, fmt.Errorf("failed to look up contestants (ids=%v): %v", ids, err)
 	}
 
-	return conts, nil
+	return cons, nil
 }
 
 // GetByAuthorizedUser returns all active Contestants in the database for which the specified User is authorized
@@ -69,12 +69,12 @@ func (r *ContestantRepository) GetByAuthorizedUser(userID types.UserID) ([]types
 	}
 
 	// Load the Contestants from the database
-	var conts []types.Contestant
-	if err := r.mdb.GetAll(r.dbName, r.collName, query, &conts); err != nil {
+	var cons []types.Contestant
+	if err := r.mdb.GetAll(r.dbName, r.collName, query, &cons); err != nil {
 		return nil, fmt.Errorf("failed to look up contestants (user id=%s): %v", userID, err)
 	}
 
-	return conts, nil
+	return cons, nil
 }
 
 // Update updates a Contestant in the database using the information in the provided model.

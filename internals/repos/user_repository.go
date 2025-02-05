@@ -8,7 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-// UserRepository is a mechanism for managing Users and their acccount details on the site.
+// UserRepository manages User records in the database.
 type UserRepository struct {
 	mdb      *db.MongoDB
 	dbName   string
@@ -60,18 +60,11 @@ func (r *UserRepository) GetByEmail(email string) (*types.User, error) {
 		return nil, fmt.Errorf("multiple users exists for email=%s", email)
 	}
 
-	// Verify that the User is active
-	u := users[0]
-	if !u.Active {
-		return nil, &types.UserInactiveError{Email: email}
-	}
-
-	return &u, nil
+	return &users[0], nil
 }
 
 // GetByID returns the active User with the provided ID.
-// Returns types.UserNotFoundError if no such User exists.
-// Returns types.UserInactiveError if the User exists but is inactive.
+// Returns types.UserNotFoundError if no such User exists or the User has been deactivated.
 //
 // id is the unique identifier of the User to look up.
 func (r *UserRepository) GetByID(id types.UserID) (*types.User, error) {
@@ -85,10 +78,8 @@ func (r *UserRepository) GetByID(id types.UserID) (*types.User, error) {
 	}
 
 	// Verify that the User exists and is active
-	if u == (types.User{}) {
+	if u.ID != id || !u.Active {
 		return nil, &types.UserNotFoundError{ID: id}
-	} else if !u.Active {
-		return nil, &types.UserInactiveError{ID: id}
 	}
 
 	return &u, nil

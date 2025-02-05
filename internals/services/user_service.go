@@ -24,7 +24,9 @@ type UserService struct {
 //
 // s is the InviteService that will be used to manage Invitations during User creation workflows.
 //
-// r is the UserRepository that will be used at runtime by the UserService.
+// ur is the UserRepository that will be used to manage User records in the database.
+//
+// sr is the SessionRepository that will be used to manage Session records in the database.
 func NewUserService(s *InviteService, ur *repos.UserRepository, sr *repos.SessionRepository) *UserService {
 	return &UserService{
 		invService: s,
@@ -41,7 +43,7 @@ func (s *UserService) Register(req *types.RegisterUserRequest) (*types.User, err
 	if req.Password != req.Confirm {
 		return nil, &types.PasswordMismatchError{}
 	}
-	invId, err := s.invService.ValidateInvite(req.Email, req.Token)
+	invId, err := s.invService.Validate(req.Email, req.Token)
 	if err != nil {
 		return nil, err
 	}
@@ -53,7 +55,7 @@ func (s *UserService) Register(req *types.RegisterUserRequest) (*types.User, err
 	}
 
 	// Mark the Invite as accepted
-	if err = s.invService.AcceptInvite(invId); err != nil {
+	if err = s.invService.Accept(invId); err != nil {
 		// TODO - figure out how rollbacks should be handled
 		return nil, err
 	}
@@ -90,7 +92,7 @@ func (s *UserService) Login(email string, pwd string) (*types.Session, error) {
 
 	// Authentication successful, create new Session for the User
 	sess := &types.Session{
-		ID:         types.SessionID(uuid.New().String()),
+		ID:         types.SessionID(uuid.NewString()),
 		User:       u.ID,
 		Expiration: time.Now().UTC().Add(env.SessionExpiration),
 	}
@@ -109,7 +111,7 @@ func (s *UserService) createUser(req *types.RegisterUserRequest) (*types.User, e
 		return nil, fmt.Errorf("failed to create user: %v", err)
 	}
 	u := &types.User{
-		ID:            types.UserID(uuid.New().String()),
+		ID:            types.UserID(uuid.NewString()),
 		Email:         req.Email,
 		Salt:          salt,
 		Hash:          hash,

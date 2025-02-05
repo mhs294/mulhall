@@ -4,16 +4,18 @@ import (
 	"github.com/mhs294/mulhall/internals/services"
 )
 
-var inviteService *services.InviteService
+var invService *services.InviteService
 var userService *services.UserService
+var poolService *services.PoolService
+var conService *services.ContestantService
 
 func InviteService() *services.InviteService {
-	if inviteService == nil {
+	if invService == nil {
 		repo := InviteRepository()
-		inviteService = services.NewInviteService(repo)
+		invService = services.NewInviteService(repo)
 	}
 
-	return inviteService
+	return invService
 }
 
 func UserService() *services.UserService {
@@ -25,4 +27,23 @@ func UserService() *services.UserService {
 	}
 
 	return userService
+}
+
+func PoolService() *services.PoolService {
+	if poolService == nil {
+		repo := PoolRepository()
+		poolService = services.NewPoolService(repo)
+	}
+
+	return poolService
+}
+
+func ContestantService() *services.ContestantService {
+	if conService == nil {
+		conRepo := ContestantRepository()
+		poolService := PoolService()
+		conService = services.NewContestantService(conRepo, poolService)
+	}
+
+	return conService
 }

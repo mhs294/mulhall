@@ -25,3 +25,14 @@ type LoginRequest struct {
 	Email    string `json:"email"`
 	Password string `json:"password"`
 }
+
+// CreatePoolRequest contains all of the information necessary to create a new Pool.
+type CreatePoolRequest struct {
+	Name string `json:"name"`
+}
+
+// CreateContestantRequest contains all of the information necessary to create a new Contestant.
+type CreateContestantRequest struct {
+	Name            string                `json:"name"`
+	AuthorizedUsers map[UserID]roles.Role `json:"authorizedUsers"`
+}

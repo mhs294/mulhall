@@ -8,7 +8,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-// InviteRepository is a mechanism for managing invitations for new Users to join the site.
+// InviteRepository manages Invite records in the database.
 type InviteRepository struct {
 	mdb      *db.MongoDB
 	dbName   string

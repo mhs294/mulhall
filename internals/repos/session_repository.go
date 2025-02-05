@@ -9,7 +9,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-// SessionRepository is a mechanism for managing Sessions of logged in Users on the site.
+// SessionRepository manages Session records in the database.
 type SessionRepository struct {
 	mdb      *db.MongoDB
 	dbName   string
@@ -53,7 +53,7 @@ func (r *SessionRepository) GetByID(id types.SessionID) (*types.Session, error) 
 	}
 
 	// Verify that the Session exists and is active (i.e. - has not expired)
-	if sess == (types.Session{}) {
+	if sess.ID != id {
 		return nil, &types.SessionNotFoundError{ID: id}
 	} else if sess.Expiration.Before(time.Now().UTC()) {
 		return nil, &types.SessionExpiredError{}
