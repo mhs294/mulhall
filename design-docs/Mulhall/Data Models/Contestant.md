@@ -2,7 +2,7 @@ Represents a single entrant within the Pool, which can be managed by one or more
 
 - ID `primary key`
 - Name `string`
-- Authorized Users `map[User ID]Role`
+- Authorized Users `map[User.ID]Role`
 	- User ID `User.ID`
 	- Role `string, enumerated`
 		- See [this](obsidian://open?vault=Mulhall&file=Brainstorming%2FRoles%20%2B%20Functions.canvas) for more info

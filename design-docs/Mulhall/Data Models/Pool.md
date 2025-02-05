@@ -2,7 +2,8 @@ Represents a Pool, which defines the rules for the elimination game as well as t
 
 - ID `primary key`
 - Name `string`
-- Contestants `[]Contestant.ID`
+- Contestants `map[Contestant.ID]struct{}`
+	- (acts as a Set of `Contestant.ID` values)
 - Active `bool`
 	- (logical delete)
 - Completed `bool`

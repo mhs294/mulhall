@@ -4,28 +4,11 @@
     "type": "split",
     "children": [
       {
-        "id": "fd0ba3dd5813c110",
+        "id": "0b2af17e2fc0f368",
         "type": "tabs",
         "children": [
           {
-            "id": "4937c99ab87c2faf",
-            "type": "leaf",
-            "state": {
-              "type": "canvas",
-              "state": {
-                "file": "Logic Flows/Event Flows.canvas",
-                "viewState": {
-                  "x": -340,
-                  "y": -380,
-                  "zoom": 0
-                }
-              },
-              "icon": "lucide-layout-dashboard",
-              "title": "Event Flows"
-            }
-          },
-          {
-            "id": "4a1ea4d370227d2c",
+            "id": "241b6f1f8307e940",
             "type": "leaf",
             "state": {
               "type": "markdown",
@@ -38,8 +21,7 @@
               "title": "Pool"
             }
           }
-        ],
-        "currentTab": 1
+        ]
       }
     ],
     "direction": "vertical"
@@ -58,7 +40,8 @@
             "state": {
               "type": "file-explorer",
               "state": {
-                "sortOrder": "alphabetical"
+                "sortOrder": "alphabetical",
+                "autoReveal": false
               },
               "icon": "lucide-folder-closed",
               "title": "Files"
@@ -180,11 +163,15 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "4a1ea4d370227d2c",
+  "active": "241b6f1f8307e940",
   "lastOpenFiles": [
     "Data Models/Contestant.md",
+    "Data Models/Team.md",
     "Data Models/Pool.md",
+    "Data Models/Pick.md",
     "Logic Flows/Event Flows.canvas",
+    "Data Models/Matchup.md",
+    "Data Models/Entry.md",
     "Data Models/Schedule.md",
     "Data Models/User.md",
     "Logic Flows/Auth Middleware Flow.canvas",
@@ -192,8 +179,6 @@
     "Logic Flows/Invitation Flow.canvas",
     "Logic Flows/Auth Middleware Flow.md",
     "Data Models/Invite.md",
-    "Data Models/Team.md",
-    "Data Models/Entry.md",
     "Brainstorming/Contestant Statuses.canvas",
     "Brainstorming/Roles + Functions.canvas",
     "Roles.md",

@@ -9,11 +9,8 @@ Pre-defined static content, but is subject to change and the system must be able
 	- 20 = Divisional Round weekend
 	- 21 = Conference Championship weekend
 	- 22 = Super Bowl weekend
-- Matchups `[]Matchup`
-	- Matchup `object`
-		- Away Team `Team.ID`
-		- Home Team `Team.ID`
-		- Date/Time `datetime`
+- Matchups `[]Matchup.ID`
+	-
 ## Example
 ```
 {
@@ -21,11 +18,8 @@ Pre-defined static content, but is subject to change and the system must be able
 	"year": 2024,
 	"week": 1,
 	"matchups": [
-		{
-			"awayTeam": "team1Id",
-			"homeTeam": "team2Id",
-			"dateTime": "2024-09-06T00:15:00.000Z"
-		},
+		"matchupId1",
+		"matchupId2",
 		// etc.
 	]
 }
