@@ -39,8 +39,8 @@ func (r *UserRepository) Insert(u *types.User) error {
 }
 
 // GetByEmail returns the active User for the provided email address.
-// Returns types.UserNotFoundError if no such User exists.
-// Returns types.UserInactiveError if a User exists for the email address but is inactive.
+// Returns UserNotFoundError if no such User exists.
+// Returns UserInactiveError if a User exists for the email address but is inactive.
 //
 // email is the email address of the User to look up.
 func (r *UserRepository) GetByEmail(email string) (*types.User, error) {
@@ -64,7 +64,7 @@ func (r *UserRepository) GetByEmail(email string) (*types.User, error) {
 }
 
 // GetByID returns the active User with the provided ID.
-// Returns types.UserNotFoundError if no such User exists or the User has been deactivated.
+// Returns UserNotFoundError if no such User exists or the User has been deactivated.
 //
 // id is the unique identifier of the User to look up.
 func (r *UserRepository) GetByID(id types.UserID) (*types.User, error) {

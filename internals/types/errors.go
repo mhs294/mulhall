@@ -96,3 +96,12 @@ type PoolNotFoundError struct {
 func (e *PoolNotFoundError) Error() string {
 	return fmt.Sprintf("failed to find pool. id=%s", e.ID)
 }
+
+// The system attempted to find a Contestant that does not exist or has been deactivated.
+type ContestantNotFoundError struct {
+	ID ContestantID
+}
+
+func (e *ContestantNotFoundError) Error() string {
+	return fmt.Sprintf("failed to find contestant. id=%s", e.ID)
+}

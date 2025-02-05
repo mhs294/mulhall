@@ -4,12 +4,13 @@ import (
 	"github.com/google/uuid"
 	"github.com/mhs294/mulhall/internals/repos"
 	"github.com/mhs294/mulhall/internals/types"
+	"github.com/mhs294/mulhall/internals/types/roles"
 	"github.com/mhs294/mulhall/internals/types/status"
 )
 
 // ContestantService represents a service for managing Contestants and their authorized Users.
 type ContestantService struct {
-	conRepo     *repos.ContestantRepository
+	repo        *repos.ContestantRepository
 	poolService *PoolService
 }
 
@@ -19,19 +20,27 @@ type ContestantService struct {
 //
 // ps is the PoolService that will be used to load Contestant information for specific Pools.
 func NewContestantService(cr *repos.ContestantRepository, ps *PoolService) *ContestantService {
-	return &ContestantService{conRepo: cr, poolService: ps}
+	return &ContestantService{repo: cr, poolService: ps}
 }
 
 // GetByPool returns all active Contestants for the specified Pool.
 //
 // poolID is the unique identifier of the Pool to load Contestants for.
 func (s *ContestantService) GetByPool(poolID types.PoolID) ([]types.Contestant, error) {
+	// Load the Pool
 	p, err := s.poolService.GetByID(poolID)
 	if err != nil {
 		return nil, err
 	}
 
-	c, err := s.conRepo.GetByIDs(p.Contestants)
+	// Load Contestant from database using Contestant IDs from Pool
+	i := 0
+	conIDs := make([]types.ContestantID, len(p.Contestants))
+	for id := range p.Contestants {
+		conIDs[i] = id
+		i++
+	}
+	c, err := s.repo.GetByIDs(conIDs)
 	if err != nil {
 		return nil, err
 	}
@@ -43,7 +52,7 @@ func (s *ContestantService) GetByPool(poolID types.PoolID) ([]types.Contestant, 
 //
 // userID is the unique identifier of the authorized User to load Contestants for.
 func (s *ContestantService) GetByAuthorizedUser(userID types.UserID) ([]types.Contestant, error) {
-	return s.conRepo.GetByAuthorizedUser(userID)
+	return s.repo.GetByAuthorizedUser(userID)
 }
 
 // Create creates a new Contestant from the provided information.
@@ -59,15 +68,81 @@ func (s *ContestantService) Create(req *types.CreateContestantRequest) (*types.C
 		Status:          status.ACTIVE,
 	}
 
-	if err := s.conRepo.Insert(c); err != nil {
+	if err := s.repo.Insert(c); err != nil {
 		return nil, err
 	}
 
 	return c, nil
 }
 
-// TODO - add authorized user
+// SetAuthorizedUser sets the specified User to be authorized for the Contestant with the specified Role.
+//
+// conID is the unique identifier of the Contestant to update.
+//
+// userID is the unique identifier of the User to authorize for the Contestant.
+//
+// role is the Role for the User that will dictate its level of access to manage the Contestant.
+func (s *ContestantService) SetAuthorizedUser(conID types.ContestantID, userID types.UserID, role roles.Role) error {
+	// Load the Contestant from the database
+	c, err := s.repo.GetByID(conID)
+	if err != nil {
+		return err
+	}
 
-// TODO - remove authorized user
+	// Update the authorized User's Role for the Contestant
+	c.AuthorizedUsers[userID] = role
+	if err = s.repo.Update(c); err != nil {
+		return err
+	}
 
-// TODO - deactivate
+	return nil
+}
+
+// RemoveAuthorizedUser removed the specified User from the list of authorized Users for the Contestant.
+//
+// conID is the unique identifier of the Contestant to update.
+//
+// userID is the unique identifier of the authorized User to remove from the Contestant.
+func (s *ContestantService) RemoveAuthorizedUser(conID types.ContestantID, userID types.UserID) error {
+	// Load the Contestant from the database
+	c, err := s.repo.GetByID(conID)
+	if err != nil {
+		return err
+	}
+
+	// Remove the authorized User from the Contestant
+	delete(c.AuthorizedUsers, userID)
+	if err = s.repo.Update(c); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// SetStatus updates the Status of the specified Contestant.
+//
+// id is the unique identifier of the Contestant to update.
+//
+// status is the new Status that will be applied to the Contestant.
+func (s *ContestantService) SetStatus(id types.ContestantID, status status.Status) error {
+	// Load the Contestant from the database
+	c, err := s.repo.GetByID(id)
+	if err != nil {
+		return err
+	}
+
+	// Update the Contestant's Status
+	c.Status = status
+	if err = s.repo.Update(c); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+// Deactivate deactivates the specified Contestant (soft-delete).
+//
+// id is the unique identifier of the Contestant to deactivate.
+func (s *ContestantService) Deactivate(id types.ContestantID) error {
+	return s.repo.Deactivate(id)
+}

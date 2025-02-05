@@ -36,11 +36,11 @@ type Contestant struct {
 
 // Pool defines a set of rules for an elimination game in which a group of Contestants compete.
 type Pool struct {
-	ID          PoolID         `json:"id"`
-	Name        string         `json:"name"`
-	Contestants []ContestantID `json:"contestants"`
-	Active      bool           `json:"active"`
-	Complete    bool           `json:"complete"`
+	ID          PoolID                    `json:"id"`
+	Name        string                    `json:"name"`
+	Contestants map[ContestantID]struct{} `json:"contestants"`
+	Active      bool                      `json:"active"`
+	Complete    bool                      `json:"complete"`
 }
 
 // Invite represents an invitation for a new user to create an account with the site and join a Contestant.

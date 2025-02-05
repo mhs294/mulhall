@@ -49,7 +49,7 @@ func (r *PoolRepository) GetAll() ([]types.Pool, error) {
 }
 
 // GetByID gets the Pool for the provided ID.
-// Returns types.UserNotFoundError if no such User exists or has been deactivated.
+// Returns UserNotFoundError if no such User exists or has been deactivated.
 //
 // id is the unique identifier of the Pool to look up.
 func (r *PoolRepository) GetByID(id types.PoolID) (*types.Pool, error) {
@@ -70,77 +70,41 @@ func (r *PoolRepository) GetByID(id types.PoolID) (*types.Pool, error) {
 	return &p, nil
 }
 
-// AddContestant adds the specified Contestant to the specified Pool.
+// Update updates a Pool in the database using the information in the provided model.
 //
-// poolID is the unique identifier of the Pool to update.
-//
-// conID is the unique identifier of the Contestant to add to the Pool.
-func (r *PoolRepository) AddContestant(poolID types.PoolID, conID types.ContestantID) error {
-	// Define the filter query and update operation
+// p is the model to use to update the Pool in the database. The models' PoolID is used to
+// determine which document in the database should be replaced with the updated version.
+func (r *PoolRepository) Update(p *types.Pool) error {
+	// Define the filter query
 	filter := bson.M{
-		"id":     poolID,
+		"id":     p.ID,
 		"active": true,
-	}
-	update := bson.M{
-		"$addToSet": bson.M{
-			"contestants": conID,
-		},
 	}
 
 	// Perform the update
-	if err := r.mdb.UpdateOne(r.dbName, r.collName, filter, update); err != nil {
-		return fmt.Errorf("failed to add contestant (pool id=%s, contestant id=%s): %v", poolID, conID, err)
+	if err := r.mdb.ReplaceOne(r.dbName, r.collName, filter, p); err != nil {
+		return fmt.Errorf("failed to update pool (%v): %v", p, err)
 	}
 
 	return nil
 }
 
-// RemoveContestant removes the specified Contestant from the specified Pool.
+// Deactivate sets the Pool with the provided ID to be inactive.
 //
-// poolID is the unique identifier of the Pool to update.
-//
-// conID is the unique identifier of the Contestant to remove from the Pool.
-func (r *PoolRepository) RemoveContestant(poolID types.PoolID, conID types.ContestantID) error {
+// id the unique identifier of the Pool to deactivate.
+func (r *PoolRepository) Deactivate(id types.PoolID) error {
 	// Define the filter query and update operation
-	filter := bson.M{
-		"id":     poolID,
-		"active": true,
-	}
-	update := bson.M{
-		"$pull": bson.M{
-			"contestants": conID,
-		},
-	}
-
-	// Perform the update
-	if err := r.mdb.UpdateOne(r.dbName, r.collName, filter, update); err != nil {
-		return fmt.Errorf("failed to remove contestant (pool id=%s, contestant id=%s): %v", poolID, conID, err)
-	}
-
-	return nil
-}
-
-// Complete marks the specified Pool as complete (i.e. - its contest has concluded)
-//
-// id is the unique identifier of the Pool to mark as complete.
-func (r *PoolRepository) Complete(id types.PoolID) error {
-	// Define the filter query and update operation
-	filter := bson.M{
-		"id":     id,
-		"active": true,
-	}
+	filter := bson.M{"id": id}
 	update := bson.M{
 		"$set": bson.M{
-			"complete": true,
+			"active": false,
 		},
 	}
 
 	// Perform the update
 	if err := r.mdb.UpdateOne(r.dbName, r.collName, filter, update); err != nil {
-		return fmt.Errorf("failed to mark pool as complete (pool id=%s): %v", id, err)
+		return fmt.Errorf("failed to deactivate pool (id=%s): %v", id, err)
 	}
 
 	return nil
 }
-
-// TODO - deactivate

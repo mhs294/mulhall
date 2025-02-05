@@ -1,6 +1,8 @@
 package services
 
 import (
+	"fmt"
+
 	"github.com/google/uuid"
 	"github.com/mhs294/mulhall/internals/repos"
 	"github.com/mhs294/mulhall/internals/types"
@@ -25,7 +27,7 @@ func (s *PoolService) Create(req *types.CreatePoolRequest) (*types.Pool, error) 
 	p := &types.Pool{
 		ID:          types.PoolID(uuid.NewString()),
 		Name:        req.Name,
-		Contestants: make([]types.ContestantID, 0),
+		Contestants: make(map[types.ContestantID]struct{}, 0),
 		Active:      true,
 		Complete:    false,
 	}
@@ -54,8 +56,25 @@ func (s *PoolService) GetByID(id types.PoolID) (*types.Pool, error) {
 // poolID is the unique identifier of the Pool to update.
 //
 // conID is the unique identifier of the Contestant to add to the Pool.
-func (s *PoolService) AddContestant(poolId types.PoolID, conID types.ContestantID) error {
-	return s.repo.AddContestant(poolId, conID)
+func (s *PoolService) AddContestant(poolID types.PoolID, conID types.ContestantID) error {
+	// Load the Pool from the database
+	p, err := s.repo.GetByID(poolID)
+	if err != nil {
+		return err
+	}
+
+	// If the Contestant is already in the Pool, do nothing and return
+	if _, exists := p.Contestants[conID]; exists {
+		return nil
+	}
+
+	// Add the Contestant to the Pool
+	p.Contestants[conID] = struct{}{}
+	if err = s.repo.Update(p); err != nil {
+		return fmt.Errorf("failed to add contestant to pool (pool=%s, contestant=%s): %v", poolID, conID, err)
+	}
+
+	return nil
 }
 
 // RemoveContestant removes the specified Contestant from the specified Pool.
@@ -63,15 +82,54 @@ func (s *PoolService) AddContestant(poolId types.PoolID, conID types.ContestantI
 // poolID is the unique identifier of the Pool to update.
 //
 // conID is the unique identifier of the Contestant to remove from the Pool.
-func (s *PoolService) RemoveContestant(poolId types.PoolID, conID types.ContestantID) error {
-	return s.repo.RemoveContestant(poolId, conID)
+func (s *PoolService) RemoveContestant(poolID types.PoolID, conID types.ContestantID) error {
+	// Load the Pool from the database
+	p, err := s.repo.GetByID(poolID)
+	if err != nil {
+		return err
+	}
+
+	// If the Contestant is not in the Pool, do nothing and return
+	if _, exists := p.Contestants[conID]; !exists {
+		return nil
+	}
+
+	// Remove the Contestant from the Pool
+	delete(p.Contestants, conID)
+	if err = s.repo.Update(p); err != nil {
+		return fmt.Errorf("failed to remove contestant to pool (pool=%s, contestant=%s): %v", poolID, conID, err)
+	}
+
+	return nil
 }
 
 // Complete marks the specified Pool as complete (i.e. - its contest has concluded)
 //
 // id is the unique identifier of the Pool to mark as complete.
 func (s *PoolService) Complete(id types.PoolID) error {
-	return s.repo.Complete(id)
+	// Load the Pool from the database
+	p, err := s.repo.GetByID(id)
+	if err != nil {
+		return err
+	}
+
+	// If the Pool is already marked as complete, do nothing and return
+	if p.Complete {
+		return nil
+	}
+
+	// Mark the Pool as complete
+	p.Complete = true
+	if err = s.repo.Update(p); err != nil {
+		return fmt.Errorf("failed to mark pool as complete (id=%s): %v", id, err)
+	}
+
+	return nil
 }
 
-// TODO - deactivate
+// Deactivate deactivates the specified Pool (soft-delete).
+//
+// id is the unique identifier of the Pool to deactivate.
+func (s *PoolService) Deactivate(id types.PoolID) error {
+	return s.repo.Deactivate(id)
+}
