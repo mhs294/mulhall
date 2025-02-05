@@ -40,12 +40,12 @@ func (s *ContestantService) GetByPool(poolID types.PoolID) ([]types.Contestant, 
 		conIDs[i] = id
 		i++
 	}
-	c, err := s.repo.GetByIDs(conIDs)
+	cons, err := s.repo.GetByIDs(conIDs)
 	if err != nil {
 		return nil, err
 	}
 
-	return c, nil
+	return cons, nil
 }
 
 // GetByAuthorizedUser returns all active Contestants for which the specified User is authorized.
