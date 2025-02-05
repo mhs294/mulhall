@@ -16,11 +16,11 @@ type ContestantService struct {
 
 // NewContestantService creates a new instance of a ContestantService and returns a pointer to it.
 //
-// cr is the ContestantRepository that will be used to manage Contestant records in the database.
+// r is the ContestantRepository that will be used to manage Contestant records in the database.
 //
 // ps is the PoolService that will be used to load Contestant information for specific Pools.
-func NewContestantService(cr *repos.ContestantRepository, ps *PoolService) *ContestantService {
-	return &ContestantService{repo: cr, poolService: ps}
+func NewContestantService(r *repos.ContestantRepository, ps *PoolService) *ContestantService {
+	return &ContestantService{repo: r, poolService: ps}
 }
 
 // GetByPool returns all active Contestants for the specified Pool.
