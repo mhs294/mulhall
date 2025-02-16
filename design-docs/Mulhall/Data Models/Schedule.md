@@ -9,6 +9,10 @@ Pre-defined static content, but is subject to change and the system must be able
 	- 20 = Divisional Round weekend
 	- 21 = Conference Championship weekend
 	- 22 = Super Bowl weekend
+- Opens `datetime`
+	- Date/Time when the schedule opens for Picks
+- Closes `datetime`
+	- Date/Time when the schedule closes for Picks
 - Matchups `[]Matchup.ID`
 	-
 ## Example
@@ -17,6 +21,8 @@ Pre-defined static content, but is subject to change and the system must be able
 	"id": <unique auto-generated ID>,
 	"year": 2024,
 	"week": 1,
+	"opens": "2025-09-02T08:00:00.000Z",
+	"closes": "2025-09-04T23:45:00.000Z",
 	"matchups": [
 		"matchupId1",
 		"matchupId2",

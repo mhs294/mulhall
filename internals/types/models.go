@@ -67,6 +67,10 @@ type Schedule struct {
 	ID       ScheduleID  `json:"id"`
 	Year     int         `json:"year"`
 	Week     int         `json:"week"`
+	Start    time.Time   `json:"start"`
+	End      time.Time   `json:"end"`
+	Opens    time.Time   `json:"opens"`
+	Closes   time.Time   `json:"closes"`
 	Matchups []MatchupID `json:"matchups"`
 }
 
@@ -80,10 +84,11 @@ type Matchup struct {
 
 // Entry represents a Contestant's Pick for a given Schedule, as well as any potential suggested Picks.
 type Entry struct {
-	ID             EntryID    `json:"id"`
-	Schedule       ScheduleID `json:"schedule"`
-	SelectedPick   Pick       `json:"selectedPick"`
-	SuggestedPicks []Pick     `json:"suggestedPicks"`
+	ID             EntryID      `json:"id"`
+	Contestant     ContestantID `json:"contestant"`
+	Schedule       ScheduleID   `json:"schedule"`
+	SelectedPick   Pick         `json:"selectedPick"`
+	SuggestedPicks []Pick       `json:"suggestedPicks"`
 }
 
 // Pick represents a selection of a Team within a given Matchup.

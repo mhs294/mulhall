@@ -1,4 +1,4 @@
- Represents a single game between two Teams at a specific date/time.
+																					 Represents a single game between two Teams at a specific date/time.
 
 - ID `primary key`
 - Away Team `Team.ID`

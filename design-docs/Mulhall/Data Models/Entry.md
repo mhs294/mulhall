@@ -1,6 +1,7 @@
 Represents a single week's picks for a single Contestant, including both their selected (locked-in) and suggested picks.
 
 - ID `primary key`
+- Contestant `Contestant.ID`
 - Schedule `Schedule.ID`
 	- The Schedule that contains the Matchups available for Picks with this Entry
 - SelectedPick `Pick`

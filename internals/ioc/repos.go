@@ -10,6 +10,9 @@ var userRepo *repos.UserRepository
 var sessionRepo *repos.SessionRepository
 var poolRepo *repos.PoolRepository
 var contestantRepo *repos.ContestantRepository
+var entryRepo *repos.EntryRepository
+var scheduleRepo *repos.ScheduleRepository
+var matchupRepo *repos.MatchupRepository
 
 func TeamRepository() *repos.TeamRepository {
 	if teamRepo == nil {
@@ -81,4 +84,40 @@ func ContestantRepository() *repos.ContestantRepository {
 	}
 
 	return contestantRepo
+}
+
+func EntryRepository() *repos.EntryRepository {
+	if entryRepo == nil {
+		mdb := MongoDB()
+		entryRepo = repos.NewEntryRepository(mdb)
+		if err := entryRepo.TestConnection(); err != nil {
+			panic(err)
+		}
+	}
+
+	return entryRepo
+}
+
+func ScheduleRepository() *repos.ScheduleRepository {
+	if scheduleRepo == nil {
+		mdb := MongoDB()
+		scheduleRepo = repos.NewScheduleRepository(mdb)
+		if err := scheduleRepo.TestConnection(); err != nil {
+			panic(err)
+		}
+	}
+
+	return scheduleRepo
+}
+
+func MatchupRepository() *repos.MatchupRepository {
+	if matchupRepo == nil {
+		mdb := MongoDB()
+		matchupRepo = repos.NewMatchupRepository(mdb)
+		if err := matchupRepo.TestConnection(); err != nil {
+			panic(err)
+		}
+	}
+
+	return matchupRepo
 }

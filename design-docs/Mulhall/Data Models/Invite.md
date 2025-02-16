@@ -1,4 +1,4 @@
-Represents an invitation for a [User](User) to join the Pool, either by an Administrator, or by a Contestant Owner. This data model is used only as a temporary mechanism to authenticate and confirm invitations via email links.
+	Represents an invitation for a [User](User) to join the Pool, either by an Administrator, or by a Contestant Owner. This data model is used only as a temporary mechanism to authenticate and confirm invitations via email links.
 
 - ID `primary key`
 - Email `string`
