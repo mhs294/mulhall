@@ -49,8 +49,8 @@ type Pool struct {
 	ID          PoolID                    `json:"id"`
 	Name        string                    `json:"name"`
 	Contestants map[ContestantID]struct{} `json:"contestants"`
-	Active      bool                      `json:"active"`
 	Complete    bool                      `json:"complete"`
+	Active      bool                      `json:"active"`
 }
 
 // Contestant defines a single entry within the pool and the authorized Users who maintain it.
@@ -64,14 +64,15 @@ type Contestant struct {
 
 // Schedule represents a set of Matchups that occur within a given week.
 type Schedule struct {
-	ID       ScheduleID  `json:"id"`
-	Year     int         `json:"year"`
-	Week     int         `json:"week"`
-	Start    time.Time   `json:"start"`
-	End      time.Time   `json:"end"`
-	Opens    time.Time   `json:"opens"`
-	Closes   time.Time   `json:"closes"`
-	Matchups []MatchupID `json:"matchups"`
+	ID       ScheduleID `json:"id"`
+	Year     int        `json:"year"`
+	Week     int        `json:"week"`
+	Start    time.Time  `json:"start"`
+	End      time.Time  `json:"end"`
+	Opens    time.Time  `json:"opens"`
+	Closes   time.Time  `json:"closes"`
+	Matchups []Matchup  `json:"matchups"`
+	Active   bool       `json:"active"`
 }
 
 // Matchup represents an individual game between two Teams.

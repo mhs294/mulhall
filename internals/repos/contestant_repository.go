@@ -39,7 +39,6 @@ func (r *ContestantRepository) Insert(c *types.Contestant) error {
 }
 
 // GetByID returns the active Contestant in the database with the specified ID.
-// Returns ContestantNotFoundError if no such Contestant exists.
 //
 // id is the unique identifier of the Contestant to load.
 func (r *ContestantRepository) GetByID(id types.ContestantID) (*types.Contestant, error) {
@@ -53,11 +52,6 @@ func (r *ContestantRepository) GetByID(id types.ContestantID) (*types.Contestant
 	var c types.Contestant
 	if err := r.mdb.GetOne(r.dbName, r.collName, query, &c); err != nil {
 		return nil, fmt.Errorf("failed to look up contestant (id=%s): %v", id, err)
-	}
-
-	// Verify that the Contestant exists and is active
-	if c.ID != id || !c.Active {
-		return nil, &types.ContestantNotFoundError{ID: id}
 	}
 
 	return &c, nil

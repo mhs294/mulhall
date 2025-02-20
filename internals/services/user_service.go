@@ -1,7 +1,6 @@
 package services
 
 import (
-	"errors"
 	"fmt"
 	"time"
 
@@ -36,6 +35,7 @@ func NewUserService(s *InviteService, ur *repos.UserRepository, sr *repos.Sessio
 }
 
 // Register handles the creation of a new User from an accepted Invite.
+// Returns PasswordMismatchError when the password and confirmation provided in the request do not match.
 //
 // req is the RegisterUserRequest containing the information required to create the User and accept the Invite.
 func (s *UserService) Register(req *types.RegisterUserRequest) (*types.User, error) {
@@ -65,6 +65,7 @@ func (s *UserService) Register(req *types.RegisterUserRequest) (*types.User, err
 
 // Login authenticates a User from the provided email and password and returns a new
 // Session for that User if authentication succeeds. If login fails, an error is returned.
+// Returns UserNotFoundError if no such User exists or the User has been deactivated.
 //
 // email is the User's email address
 //
@@ -73,12 +74,12 @@ func (s *UserService) Login(email string, pwd string) (*types.Session, error) {
 	// Look up the User
 	u, err := s.userRepo.GetByEmail(email)
 	if err != nil {
-		var notFound *types.UserNotFoundError
-		if errors.As(err, &notFound) {
-			return nil, notFound
-		}
-
 		return nil, fmt.Errorf("failed to login user: %v", err)
+	}
+
+	// Verify that the User exists and is active
+	if u == nil || !u.Active {
+		return nil, &types.UserNotFoundError{Email: email}
 	}
 
 	// Compare the submitted password against the User's password

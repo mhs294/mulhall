@@ -12,7 +12,6 @@ var poolRepo *repos.PoolRepository
 var contestantRepo *repos.ContestantRepository
 var entryRepo *repos.EntryRepository
 var scheduleRepo *repos.ScheduleRepository
-var matchupRepo *repos.MatchupRepository
 
 func TeamRepository() *repos.TeamRepository {
 	if teamRepo == nil {
@@ -108,16 +107,4 @@ func ScheduleRepository() *repos.ScheduleRepository {
 	}
 
 	return scheduleRepo
-}
-
-func MatchupRepository() *repos.MatchupRepository {
-	if matchupRepo == nil {
-		mdb := MongoDB()
-		matchupRepo = repos.NewMatchupRepository(mdb)
-		if err := matchupRepo.TestConnection(); err != nil {
-			panic(err)
-		}
-	}
-
-	return matchupRepo
 }

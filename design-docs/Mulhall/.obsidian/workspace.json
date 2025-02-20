@@ -13,12 +13,12 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Data Models/Entry.md",
+                "file": "Data Models/Schedule.md",
                 "mode": "source",
                 "source": false
               },
               "icon": "lucide-file",
-              "title": "Entry"
+              "title": "Schedule"
             }
           }
         ]
@@ -165,12 +165,12 @@
   },
   "active": "241b6f1f8307e940",
   "lastOpenFiles": [
+    "Data Models/Pool.md",
+    "Data Models/Entry.md",
     "Data Models/Schedule.md",
     "Data Models/Matchup.md",
     "Data Models/Session.md",
     "Data Models/Invite.md",
-    "Data Models/Pool.md",
-    "Data Models/Entry.md",
     "Data Models/Contestant.md",
     "Data Models/Team.md",
     "Data Models/Pick.md",

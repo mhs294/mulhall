@@ -2,7 +2,6 @@ package repos
 
 import (
 	"fmt"
-	"time"
 
 	"github.com/mhs294/mulhall/internals/db"
 	"github.com/mhs294/mulhall/internals/types"
@@ -50,13 +49,6 @@ func (r *SessionRepository) GetByID(id types.SessionID) (*types.Session, error) 
 	var sess types.Session
 	if err := r.mdb.GetOne(r.dbName, r.collName, query, &sess); err != nil {
 		return nil, fmt.Errorf("failed to look up session: %v", err)
-	}
-
-	// Verify that the Session exists and is active (i.e. - has not expired)
-	if sess.ID != id {
-		return nil, &types.SessionNotFoundError{ID: id}
-	} else if sess.Expiration.Before(time.Now().UTC()) {
-		return nil, &types.SessionExpiredError{}
 	}
 
 	return &sess, nil

@@ -1,6 +1,8 @@
 package types
 
 import (
+	"time"
+
 	"github.com/mhs294/mulhall/internals/types/roles"
 )
 
@@ -35,4 +37,12 @@ type CreatePoolRequest struct {
 type CreateContestantRequest struct {
 	Name            string                `json:"name"`
 	AuthorizedUsers map[UserID]roles.Role `json:"authorizedUsers"`
+}
+
+// CreateScheduleRequest contains all of the information necessary to create a new, empty Schedule.
+type CreateScheduleRequest struct {
+	Year   int       `json:"year"`
+	Week   int       `json:"week"`
+	Date   string    `json:"date"` // ISO-8601 date-only string representation (e.g. - "2025-02-09")
+	Closes time.Time `json:"closes"`
 }

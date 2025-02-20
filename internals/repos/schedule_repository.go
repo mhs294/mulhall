@@ -39,10 +39,26 @@ func (r *ScheduleRepository) Insert(s *types.Schedule) error {
 	return nil
 }
 
+// GetByID gets the Schdule for the provided ID.
+//
+// id is the unique identifier of the Schedule to load.
+func (r *ScheduleRepository) GetByID(id types.ScheduleID) (*types.Schedule, error) {
+	// Define the query
+	query := bson.M{"id": id}
+
+	// Load the Schedule from the database
+	var s types.Schedule
+	if err := r.mdb.GetOne(r.dbName, r.collName, query, &s); err != nil {
+		return nil, fmt.Errorf("failed to look up schedule (id=%v): %v", id, err)
+	}
+
+	return &s, nil
+}
+
 // GetByDateTime gets the Schdule whose start/end window contains the provided date/time.
 //
 // dateTime is the [time.Time] whose corresponding Schedule will be loaded.
-func (r *ScheduleRepository) GetByDateTime(datetime *time.Time) (*types.Schedule, error) {
+func (r *ScheduleRepository) GetByDateTime(datetime time.Time) (*types.Schedule, error) {
 	// Define the query
 	query := bson.M{
 		"start": bson.M{"$lte": datetime},

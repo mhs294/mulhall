@@ -39,8 +39,6 @@ func (r *UserRepository) Insert(u *types.User) error {
 }
 
 // GetByEmail returns the active User for the provided email address.
-// Returns UserNotFoundError if no such User exists.
-// Returns UserInactiveError if a User exists for the email address but is inactive.
 //
 // email is the email address of the User to look up.
 func (r *UserRepository) GetByEmail(email string) (*types.User, error) {
@@ -48,23 +46,15 @@ func (r *UserRepository) GetByEmail(email string) (*types.User, error) {
 	query := bson.M{"email": email}
 
 	// Load User from the database
-	var users []types.User
-	if err := r.mdb.GetAll(r.dbName, r.collName, query, &users); err != nil {
-		return nil, fmt.Errorf("failed to look up user: %v", err)
+	var u types.User
+	if err := r.mdb.GetOne(r.dbName, r.collName, query, &u); err != nil {
+		return nil, fmt.Errorf("failed to look up user (email=%s): %v", email, err)
 	}
 
-	// Verify that only one User was loaded
-	if len(users) == 0 {
-		return nil, &types.UserNotFoundError{Email: email}
-	} else if len(users) != 1 {
-		return nil, fmt.Errorf("multiple users exists for email=%s", email)
-	}
-
-	return &users[0], nil
+	return &u, nil
 }
 
 // GetByID returns the active User with the provided ID.
-// Returns UserNotFoundError if no such User exists or the User has been deactivated.
 //
 // id is the unique identifier of the User to look up.
 func (r *UserRepository) GetByID(id types.UserID) (*types.User, error) {
@@ -74,12 +64,7 @@ func (r *UserRepository) GetByID(id types.UserID) (*types.User, error) {
 	// Load User from the database
 	var u types.User
 	if err := r.mdb.GetOne(r.dbName, r.collName, query, &u); err != nil {
-		return nil, fmt.Errorf("failed to look up user: %v", err)
-	}
-
-	// Verify that the User exists and is active
-	if u.ID != id || !u.Active {
-		return nil, &types.UserNotFoundError{ID: id}
+		return nil, fmt.Errorf("failed to look up user (id=%v): %v", id, err)
 	}
 
 	return &u, nil

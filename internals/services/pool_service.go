@@ -48,7 +48,18 @@ func (s *PoolService) GetAll() ([]types.Pool, error) {
 //
 // id is the unique identifier of the Pool to look up.
 func (s *PoolService) GetByID(id types.PoolID) (*types.Pool, error) {
-	return s.repo.GetByID(id)
+	// Load the Pool from the database
+	p, err := s.repo.GetByID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	// Verify that the Pool exists and is active
+	if p == nil || !p.Active {
+		return nil, &types.PoolNotFoundError{ID: id}
+	}
+
+	return p, nil
 }
 
 // AddContestant adds the specified Contestant to the specified Pool.

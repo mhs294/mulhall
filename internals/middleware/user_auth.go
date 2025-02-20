@@ -3,6 +3,7 @@ package middleware
 import (
 	"log"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/mhs294/mulhall/internals/repos"
@@ -78,6 +79,13 @@ func (m *UserAuthMiddleware) userAuth(ctx *gin.Context) (*types.Session, error) 
 	if err != nil {
 		m.logger.Printf("failed to load session from database: %v", err)
 		return nil, err
+	}
+
+	// Verify that the Session exists and is active (i.e. - has not expired)
+	if sess == nil {
+		return nil, &types.SessionNotFoundError{ID: sessID}
+	} else if sess.Expiration.Before(time.Now().UTC()) {
+		return nil, &types.SessionExpiredError{ID: sessID}
 	}
 
 	return sess, nil

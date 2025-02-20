@@ -49,7 +49,6 @@ func (r *PoolRepository) GetAll() ([]types.Pool, error) {
 }
 
 // GetByID gets the Pool for the provided ID.
-// Returns UserNotFoundError if no such User exists or has been deactivated.
 //
 // id is the unique identifier of the Pool to look up.
 func (r *PoolRepository) GetByID(id types.PoolID) (*types.Pool, error) {
@@ -60,11 +59,6 @@ func (r *PoolRepository) GetByID(id types.PoolID) (*types.Pool, error) {
 	var p types.Pool
 	if err := r.mdb.GetOne(r.dbName, r.collName, query, &p); err != nil {
 		return nil, fmt.Errorf("failed to look up pool: %v", err)
-	}
-
-	// Verify that the Pool exists and is active
-	if p.ID != id || !p.Active {
-		return nil, &types.PoolNotFoundError{ID: id}
 	}
 
 	return &p, nil

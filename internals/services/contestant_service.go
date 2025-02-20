@@ -76,6 +76,7 @@ func (s *ContestantService) Create(req *types.CreateContestantRequest) (*types.C
 }
 
 // SetAuthorizedUser sets the specified User to be authorized for the Contestant with the specified Role.
+// Returns ContestantNotFoundError if no such Contestant exists.
 //
 // conID is the unique identifier of the Contestant to update.
 //
@@ -89,6 +90,11 @@ func (s *ContestantService) SetAuthorizedUser(conID types.ContestantID, userID t
 		return err
 	}
 
+	// Verify that the Contestant exists and is active
+	if c == nil || !c.Active {
+		return &types.ContestantNotFoundError{ID: conID}
+	}
+
 	// Update the authorized User's Role for the Contestant
 	c.AuthorizedUsers[userID] = role
 	if err = s.repo.Update(c); err != nil {
@@ -99,6 +105,7 @@ func (s *ContestantService) SetAuthorizedUser(conID types.ContestantID, userID t
 }
 
 // RemoveAuthorizedUser removed the specified User from the list of authorized Users for the Contestant.
+// Returns ContestantNotFoundError if no such Contestant exists.
 //
 // conID is the unique identifier of the Contestant to update.
 //
@@ -108,6 +115,11 @@ func (s *ContestantService) RemoveAuthorizedUser(conID types.ContestantID, userI
 	c, err := s.repo.GetByID(conID)
 	if err != nil {
 		return err
+	}
+
+	// Verify that the Contestant exists and is active
+	if c == nil || !c.Active {
+		return &types.ContestantNotFoundError{ID: conID}
 	}
 
 	// Remove the authorized User from the Contestant
@@ -120,6 +132,7 @@ func (s *ContestantService) RemoveAuthorizedUser(conID types.ContestantID, userI
 }
 
 // SetStatus updates the Status of the specified Contestant.
+// Returns ContestantNotFoundError if no such Contestant exists.
 //
 // id is the unique identifier of the Contestant to update.
 //
@@ -129,6 +142,11 @@ func (s *ContestantService) SetStatus(id types.ContestantID, status status.Statu
 	c, err := s.repo.GetByID(id)
 	if err != nil {
 		return err
+	}
+
+	// Verify that the Contestant exists and is active
+	if c == nil || !c.Active {
+		return &types.ContestantNotFoundError{ID: id}
 	}
 
 	// Update the Contestant's Status
