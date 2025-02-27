@@ -46,3 +46,10 @@ type CreateScheduleRequest struct {
 	Date   string    `json:"date"` // ISO-8601 date-only string representation (e.g. - "2025-02-09")
 	Closes time.Time `json:"closes"`
 }
+
+// CreateMatchupRequest contains all of the information necessary to create a new Machup to add to a Schedule.
+type CreateMatchupRequest struct {
+	AwayTeam TeamID    `json:"awayTeam"`
+	HomeTeam TeamID    `json:"homeTeam"`
+	DateTime time.Time `json:"dateTime"`
+}

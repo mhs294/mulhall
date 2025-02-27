@@ -111,12 +111,17 @@ func (e *ContestantNotFoundError) Error() string {
 
 // The system attempted to find a Schedule that does not exist or has been deactivated.
 type ScheduleNotFoundError struct {
+	ID   ScheduleID
 	Date time.Time
 	Year int
 	Week int
 }
 
 func (e *ScheduleNotFoundError) Error() string {
+	if e.ID != "" {
+		return fmt.Sprintf("failed to find schedule. id=%v", e.ID)
+	}
+
 	if e.Date.IsZero() {
 		return fmt.Sprintf("failed to find schedule. date=%s", e.Date.Format(time.UnixDate))
 	}
@@ -151,5 +156,29 @@ func (e *ScheduleInvalidClosesError) Error() string {
 	return fmt.Sprintf("schedule closes date/time must fall between %s and %s (request=%v).",
 		e.Start.Format(time.UnixDate),
 		e.End.Format(time.UnixDate),
+		e.Request)
+}
+
+// The system attempted to add a Matchup that would occur outside of its Schedule's date/time range.
+type MatchupInvalidDateTimeError struct {
+	Schedule ScheduleID
+	Request  *CreateMatchupRequest
+}
+
+func (e *MatchupInvalidDateTimeError) Error() string {
+	return fmt.Sprintf("matchup would fall outside of the schedule's date/time range. schedule=%v, request=%v",
+		e.Schedule,
+		e.Request)
+}
+
+// The system attempted to add a Matchup to a Schedule that would result in the same team being in multiple Matchups on that Schedule.
+type MatchupConflictError struct {
+	Schedule ScheduleID
+	Request  *CreateMatchupRequest
+}
+
+func (e *MatchupConflictError) Error() string {
+	return fmt.Sprintf("matchup would create a conflict with an existing matchup. schedule=%v, request=%v",
+		e.Schedule,
 		e.Request)
 }

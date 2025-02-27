@@ -145,7 +145,52 @@ func (s *ScheduleService) GetByDateTime(date time.Time) (*types.Schedule, error)
 	return sch, nil
 }
 
-// TODO - AddMatchup
+// AddMatchup adds the provided Matchup to the Schedule with the provided ID.
+//
+// id is the unique identifier of the Schedule to add the Matchup to.
+//
+// req is the CreateMatchupRequest containing the details of the Matchup to add to the Schedule.
+func (s *ScheduleService) AddMatchup(id types.ScheduleID, req *types.CreateMatchupRequest) (*types.Schedule, error) {
+	// Load the Schedule from the database
+	sch, err := s.repo.GetByID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	// Verify that the Schedule exists and is active
+	if sch == nil || !sch.Active {
+		return nil, &types.ScheduleNotFoundError{ID: id}
+	}
+
+	// Verify that the Matchup date/time falls within the Schedule's date/time range
+	if sch.Start.After(req.DateTime) || sch.End.Before(req.DateTime) {
+		return nil, &types.MatchupInvalidDateTimeError{Schedule: id, Request: req}
+	}
+
+	// Verify that Teams in Matchup aren't already featured in another Matchup on the Schedule
+	for _, m := range sch.Matchups {
+		if m.HomeTeam == req.HomeTeam ||
+			m.HomeTeam == req.AwayTeam ||
+			m.AwayTeam == req.HomeTeam ||
+			m.AwayTeam == req.AwayTeam {
+			return nil, &types.MatchupConflictError{Schedule: id, Request: req}
+		}
+	}
+
+	// Add the Matchup to the Schedule
+	m := types.Matchup{
+		ID:       types.MatchupID(uuid.NewString()),
+		AwayTeam: req.AwayTeam,
+		HomeTeam: req.HomeTeam,
+		DateTime: req.DateTime,
+	}
+	sch.Matchups = append(sch.Matchups, m)
+	if err = s.repo.Update(sch); err != nil {
+		return nil, err
+	}
+
+	return sch, nil
+}
 
 // TODO - EditMatchup
 
