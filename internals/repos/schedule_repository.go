@@ -110,3 +110,23 @@ func (r *ScheduleRepository) Update(s *types.Schedule) error {
 
 	return nil
 }
+
+// Deactivate sets the Schedule with the provided ID to be inactive.
+//
+// id the unique identifier of the Schedule to deactivate.
+func (r *ScheduleRepository) Deactivate(id types.ScheduleID) error {
+	// Define the filter query and update operation
+	filter := bson.M{"id": id}
+	update := bson.M{
+		"$set": bson.M{
+			"active": false,
+		},
+	}
+
+	// Perform the update
+	if err := r.mdb.UpdateOne(r.dbName, r.collName, filter, update); err != nil {
+		return fmt.Errorf("failed to deactivate schedule (id=%s): %v", id, err)
+	}
+
+	return nil
+}

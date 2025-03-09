@@ -64,36 +64,29 @@ type Contestant struct {
 
 // Schedule represents a set of Matchups that occur within a given week.
 type Schedule struct {
-	ID       ScheduleID `json:"id"`
-	Year     int        `json:"year"`
-	Week     int        `json:"week"`
-	Start    time.Time  `json:"start"`
-	End      time.Time  `json:"end"`
-	Opens    time.Time  `json:"opens"`
-	Closes   time.Time  `json:"closes"`
-	Matchups []Matchup  `json:"matchups"`
-	Active   bool       `json:"active"`
+	ID       ScheduleID            `json:"id"`
+	Year     int                   `json:"year"`
+	Week     int                   `json:"week"`
+	Start    time.Time             `json:"start"`
+	End      time.Time             `json:"end"`
+	Opens    time.Time             `json:"opens"`
+	Closes   time.Time             `json:"closes"`
+	Matchups map[MatchupID]Matchup `json:"matchups"`
+	Active   bool                  `json:"active"`
 }
 
 // Matchup represents an individual game between two Teams.
 type Matchup struct {
-	ID       MatchupID `json:"id"`
 	AwayTeam TeamID    `json:"awayTeam"`
 	HomeTeam TeamID    `json:"homeTeam"`
 	DateTime time.Time `json:"dateTime"`
 }
 
-// Entry represents a Contestant's Pick for a given Schedule, as well as any potential suggested Picks.
+// Entry represents a Contestant's pick for a given Schedule, as well as any potential suggested picks.
 type Entry struct {
-	ID             EntryID      `json:"id"`
-	Contestant     ContestantID `json:"contestant"`
-	Schedule       ScheduleID   `json:"schedule"`
-	SelectedPick   Pick         `json:"selectedPick"`
-	SuggestedPicks []Pick       `json:"suggestedPicks"`
-}
-
-// Pick represents a selection of a Team within a given Matchup.
-type Pick struct {
-	Matchup MatchupID `json:"matchup"`
-	Team    TeamID    `json:"team"`
+	ID             EntryID              `json:"id"`
+	Contestant     ContestantID         `json:"contestant"`
+	Schedule       ScheduleID           `json:"schedule"`
+	SelectedPick   map[MatchupID]TeamID `json:"selectedPick"`
+	SuggestedPicks map[MatchupID]TeamID `json:"suggestedPicks"`
 }

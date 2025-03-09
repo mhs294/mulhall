@@ -159,26 +159,28 @@ func (e *ScheduleInvalidClosesError) Error() string {
 		e.Request)
 }
 
-// The system attempted to add a Matchup that would occur outside of its Schedule's date/time range.
-type MatchupInvalidDateTimeError struct {
-	Schedule ScheduleID
-	Request  *CreateMatchupRequest
+// The system attempted to add/update a Matchup with incomplete or invalid parameters.
+type MatchupInvalidError struct {
+	ScheduleID ScheduleID
+	Matchup    *Matchup
+	Reason     string
 }
 
-func (e *MatchupInvalidDateTimeError) Error() string {
-	return fmt.Sprintf("matchup would fall outside of the schedule's date/time range. schedule=%v, request=%v",
-		e.Schedule,
-		e.Request)
+func (e *MatchupInvalidError) Error() string {
+	return fmt.Sprintf("invalid matchup, reason=%s. schedule=%v, matchup=%v",
+		e.Reason,
+		e.ScheduleID,
+		e.Matchup)
 }
 
-// The system attempted to add a Matchup to a Schedule that would result in the same team being in multiple Matchups on that Schedule.
-type MatchupConflictError struct {
-	Schedule ScheduleID
-	Request  *CreateMatchupRequest
+// The system attempted to update/remove a Matchup that could not be found.
+type MatchupNotFoundError struct {
+	ScheduleID ScheduleID
+	MatchupID  MatchupID
 }
 
-func (e *MatchupConflictError) Error() string {
-	return fmt.Sprintf("matchup would create a conflict with an existing matchup. schedule=%v, request=%v",
-		e.Schedule,
-		e.Request)
+func (e *MatchupNotFoundError) Error() string {
+	return fmt.Sprintf("matchup not found. schedule=%v, matchup=%v",
+		e.ScheduleID,
+		e.MatchupID)
 }

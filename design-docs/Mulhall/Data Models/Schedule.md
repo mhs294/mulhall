@@ -13,7 +13,7 @@ Pre-defined static content, but is subject to change and the system must be able
 	- Date/Time when the schedule opens for Picks
 - Closes `datetime`
 	- Date/Time when the schedule closes for Picks
-- Matchups `[]Matchup`
+- Matchups `map[MatchupID]Matchup`
 ## Example
 ```
 {
@@ -24,10 +24,14 @@ Pre-defined static content, but is subject to change and the system must be able
 	"end": "2025-09-09T07:59:59.999Z"
 	"opens": "2025-09-02T08:00:00.000Z",
 	"closes": "2025-09-04T23:45:00.000Z",
-	"matchups": [
-		"matchupId1",
-		"matchupId2",
+	"matchups": {
+		"matchupId1": {
+			// matchup1
+		},
+		"matchupId2": {
+			// matchup2
+		},
 		// etc.
-	]
+	}
 }
 ```

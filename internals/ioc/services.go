@@ -8,6 +8,8 @@ var invService *services.InviteService
 var userService *services.UserService
 var poolService *services.PoolService
 var conService *services.ContestantService
+var schService *services.ScheduleService
+var entryService *services.EntryService
 
 func InviteService() *services.InviteService {
 	if invService == nil {
@@ -46,4 +48,22 @@ func ContestantService() *services.ContestantService {
 	}
 
 	return conService
+}
+
+func ScheduleService() *services.ScheduleService {
+	if schService == nil {
+		repo := ScheduleRepository()
+		schService = services.NewScheduleService(repo)
+	}
+
+	return schService
+}
+
+func EntryService() *services.EntryService {
+	if entryService == nil {
+		repo := EntryRepository()
+		entryService = services.NewEntryService(repo)
+	}
+
+	return entryService
 }

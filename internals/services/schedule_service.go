@@ -9,7 +9,7 @@ import (
 	"github.com/mhs294/mulhall/internals/types"
 )
 
-// ScheduleService represents a service for managing weekly Schedules of Matchups available for Picks.
+// ScheduleService represents a service for managing weekly Schedules of Matchups available for picks.
 type ScheduleService struct {
 	repo *repos.ScheduleRepository
 }
@@ -94,12 +94,30 @@ func (s *ScheduleService) CreateSchedule(req *types.CreateScheduleRequest) (*typ
 		End:      end,
 		Opens:    start,
 		Closes:   req.Closes,
-		Matchups: make([]types.Matchup, 0),
+		Matchups: make(map[types.MatchupID]types.Matchup, 0),
 		Active:   true,
 	}
 
 	if err = s.repo.Insert(sch); err != nil {
 		return nil, err
+	}
+
+	return sch, nil
+}
+
+// GetByID gets the Schedule for the provided ID.
+//
+// id is the unique identifier of the Schedule to look up.
+func (s *ScheduleService) GetByID(id types.ScheduleID) (*types.Schedule, error) {
+	// Load the Schedule from the database
+	sch, err := s.repo.GetByID(id)
+	if err != nil {
+		return nil, err
+	}
+
+	// Verify that the Schedule exists and is active
+	if sch == nil || !sch.Active {
+		return nil, &types.ScheduleNotFoundError{ID: id}
 	}
 
 	return sch, nil
@@ -145,46 +163,27 @@ func (s *ScheduleService) GetByDateTime(date time.Time) (*types.Schedule, error)
 	return sch, nil
 }
 
-// AddMatchup adds the provided Matchup to the Schedule with the provided ID.
-//
-// id is the unique identifier of the Schedule to add the Matchup to.
+// AddMatchup creates a Matchup from the provided request and adds that Matchup to the specified Schedule.
+// Returns the updated state of the Schedule containing the Matchup being added.
+// Returns MatchupInvalidError if the Matchup is missing required information or would not be valid within the Schedule.
 //
 // req is the CreateMatchupRequest containing the details of the Matchup to add to the Schedule.
-func (s *ScheduleService) AddMatchup(id types.ScheduleID, req *types.CreateMatchupRequest) (*types.Schedule, error) {
+func (s *ScheduleService) AddMatchup(req *types.CreateMatchupRequest) (*types.Schedule, error) {
 	// Load the Schedule from the database
-	sch, err := s.repo.GetByID(id)
+	sch, err := s.GetByID(req.ScheduleID)
 	if err != nil {
 		return nil, err
 	}
 
-	// Verify that the Schedule exists and is active
-	if sch == nil || !sch.Active {
-		return nil, &types.ScheduleNotFoundError{ID: id}
-	}
-
-	// Verify that the Matchup date/time falls within the Schedule's date/time range
-	if sch.Start.After(req.DateTime) || sch.End.Before(req.DateTime) {
-		return nil, &types.MatchupInvalidDateTimeError{Schedule: id, Request: req}
-	}
-
-	// Verify that Teams in Matchup aren't already featured in another Matchup on the Schedule
-	for _, m := range sch.Matchups {
-		if m.HomeTeam == req.HomeTeam ||
-			m.HomeTeam == req.AwayTeam ||
-			m.AwayTeam == req.HomeTeam ||
-			m.AwayTeam == req.AwayTeam {
-			return nil, &types.MatchupConflictError{Schedule: id, Request: req}
-		}
+	// Validate the Matchup against the current Schedule
+	matchup := req.Matchup
+	if err = validateMatchup(sch, matchup, ""); err != nil {
+		return nil, err
 	}
 
 	// Add the Matchup to the Schedule
-	m := types.Matchup{
-		ID:       types.MatchupID(uuid.NewString()),
-		AwayTeam: req.AwayTeam,
-		HomeTeam: req.HomeTeam,
-		DateTime: req.DateTime,
-	}
-	sch.Matchups = append(sch.Matchups, m)
+	id := types.MatchupID(uuid.NewString())
+	sch.Matchups[id] = *matchup
 	if err = s.repo.Update(sch); err != nil {
 		return nil, err
 	}
@@ -192,8 +191,107 @@ func (s *ScheduleService) AddMatchup(id types.ScheduleID, req *types.CreateMatch
 	return sch, nil
 }
 
-// TODO - EditMatchup
+// UpdateMatchup updates an existing Matchup in a Schedule using the information in the provided request.
+// Returns the updated state of the Schedule containing the Matchup being updated.
+// Returns MatchupInvalidError if the Matchup is missing required information or would not be valid within the Schedule.
+//
+// req is the UpdateMatchupRequest containing the details of the Matchup to Update within the Schedule.
+func (s *ScheduleService) UpdateMatchup(req *types.UpdateMatchupRequest) (*types.Schedule, error) {
+	// Load the Schedule from the database
+	sch, err := s.GetByID(req.ScheduleID)
+	if err != nil {
+		return nil, err
+	}
 
-// TODO - RemoveMatchup
+	// Verify the specified Matchup exists in the Schedule
+	if _, exists := sch.Matchups[req.MatchupID]; !exists {
+		return nil, &types.MatchupNotFoundError{ScheduleID: req.ScheduleID, MatchupID: req.MatchupID}
+	}
 
-// TODO - Deactivate
+	// Validate the Matchup against the current Schedule
+	matchup := req.Matchup
+	if err = validateMatchup(sch, matchup, req.MatchupID); err != nil {
+		return nil, err
+	}
+
+	// Update the Matchup in the Schedule
+	sch.Matchups[req.MatchupID] = *matchup
+	if err = s.repo.Update(sch); err != nil {
+		return nil, err
+	}
+
+	return sch, nil
+}
+
+// RemoveMatchup removes the Matchup with the provided ID from the specified Schedule.
+//
+// schID is the unique identifier of the Schedule containing the Matchup to remove.
+//
+// mID is the unique identifier of the Matchup to remove.
+func (s *ScheduleService) RemoveMatchup(schId types.ScheduleID, mID types.MatchupID) (*types.Schedule, error) {
+	// Load the Schedule from the database
+	sch, err := s.GetByID(schId)
+	if err != nil {
+		return nil, err
+	}
+
+	// Verify the specified Matchup exists in the Schedule
+	if _, exists := sch.Matchups[mID]; !exists {
+		return nil, &types.MatchupNotFoundError{ScheduleID: schId, MatchupID: mID}
+	}
+
+	// Remove the Matchup from the Schedule
+	delete(sch.Matchups, mID)
+	if err = s.repo.Update(sch); err != nil {
+		return nil, err
+	}
+
+	return sch, nil
+}
+
+// Deactivate deactivates the specified Schedule (soft-delete).
+//
+// id is the unique identifier of the Schedule to deactivate.
+func (s *ScheduleService) Deactivate(id types.ScheduleID) error {
+	return s.repo.Deactivate(id)
+}
+
+func validateMatchup(sch *types.Schedule, matchup *types.Matchup, mID types.MatchupID) error {
+	// Verify that the Matchup is not null
+	if matchup == nil {
+		return &types.MatchupInvalidError{
+			ScheduleID: sch.ID,
+			Matchup:    matchup,
+			Reason:     "matchup is nil",
+		}
+	}
+
+	// Verify that the Matchup date/time falls within the Schedule's date/time range
+	if sch.Start.After(matchup.DateTime) || sch.End.Before(matchup.DateTime) {
+		return &types.MatchupInvalidError{
+			ScheduleID: sch.ID,
+			Matchup:    matchup,
+			Reason:     "matchup would fall outside of the schedule's date/time range",
+		}
+	}
+
+	// Verify that Teams in Matchup aren't already featured in another Matchup on the Schedule
+	for id, m := range sch.Matchups {
+		if id == mID {
+			continue
+		}
+
+		if m.HomeTeam == matchup.HomeTeam ||
+			m.HomeTeam == matchup.AwayTeam ||
+			m.AwayTeam == matchup.HomeTeam ||
+			m.AwayTeam == matchup.AwayTeam {
+			return &types.MatchupInvalidError{
+				ScheduleID: sch.ID,
+				Matchup:    matchup,
+				Reason:     "matchup would create a conflict with teams from another existing matchup",
+			}
+		}
+	}
+
+	return nil
+}
